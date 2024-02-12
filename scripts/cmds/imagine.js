@@ -17,7 +17,7 @@ module.exports = {
     longDescription: {
       en: "generate an image"
     },
-    category: "𝗠𝗘𝗗𝗜𝗔",
+    category: "image",
     guide: {
       en: "[prompt | style]"
     }
