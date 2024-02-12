@@ -5,7 +5,7 @@ const badWords = ["gay", "pussy", "dick","nude"," without","clothes","sugar","fu
 
 module.exports = {
   config: {
-    name: "imagine",
+    name: "sdxl",
     aliases: [],
     author: "kshitiz",
     version: "2.0",
@@ -17,32 +17,40 @@ module.exports = {
     longDescription: {
       en: "generate an image"
     },
-    category: "image",
+    category: "𝗠𝗘𝗗𝗜𝗔",
     guide: {
-      en: "[prompt]"
+      en: "[prompt | style]"
     }
   },
   onStart: async function ({ api, event, args }) {
     let path = __dirname + "/cache/image.png";
-    let prompt = args.join(" ");
+    let prompt;
+    let style = 1;
+
+    if (args.length === 0) {
+      return api.sendMessage("Please provide a prompt and style number. eg: prompt | style", event.threadID, event.messageID);
+    }
+
+    if (args.length > 1) {
+      const [promptArg, styleArg] = args.join(" ").split("|").map(item => item.trim());
+      prompt = promptArg;
+      style = styleArg;
+    } else {
+      prompt = args[0];
+    }
+
     let tid = event.threadID;
     let mid = event.messageID;
 
-    // Check for NSFW prompt
     if (containsBadWords(prompt)) {
       return api.sendMessage("❎ | NSFW Prompt Detected", tid, mid);
     }
-
-    const availableStyles = ['1', '2', '3']; // Define available style numbers
-
-    // Choose a random style from availableStyles
-    let randomStyle = availableStyles[Math.floor(Math.random() * availableStyles.length)];
 
     try {
       api.sendMessage("⏳ Generating... please wait it will take time.", tid, mid);
 
       let enctxt = encodeURIComponent(prompt);
-      let encStyle = encodeURIComponent(randomStyle);
+      let encStyle = encodeURIComponent(style);
       let url = `http://ger2-1.deploy.sbs:1792/sdxl?prompt=${enctxt}&styles=${encStyle}`;
 
       let response = await axios.get(url, { responseType: "stream" });
