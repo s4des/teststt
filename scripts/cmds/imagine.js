@@ -5,7 +5,7 @@ const badWords = ["gay", "pussy", "dick","nude"," without","clothes","sugar","fu
 
 module.exports = {
   config: {
-    name: "sdxl",
+    name: "imagine",
     aliases: [],
     author: "kshitiz",
     version: "2.0",
