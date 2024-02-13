@@ -30,20 +30,21 @@ module.exports = {
       }
 
       if (args[0] === 'draw') {
-        
         const [promptText, model] = args.slice(1).join(' ').split('|').map((text) => text.trim());
         const puti = model || "2";
         const baseURL = `https://sandipapi.onrender.com/sdxl?prompt=${promptText}&model=${puti}`;
 
         message.reply({
-          body: `${args.join(" ")}`,
-          attachment: await global.utils.getStreamFromURL(baseURL)
+          body: `🗨 | 𝙲𝚑𝚊𝚝𝙶𝙿𝚃 | \n━━━━━━━━━━━━━━━━\n${args.join(" ")}`,
+          attachment: await global.utils.getStreamFromURL(baseURL),
+          footer: '━━━━━━━━━━━━━━━━'
         });
       } else {
         const result = await this.makeApiRequest(encodedPrompt, uid, a);
 
         message.reply({
-          body: `${result}`,
+          body: `🗨 | 𝙲𝚑𝚊𝚝𝙶𝙿𝚃 | \n━━━━━━━━━━━━━━━━\n${result}`,
+          footer: '━━━━━━━━━━━━━━━━'
         }, (err, info) => {
           global.GoatBot.onReply.set(info.messageID, {
             commandName: this.config.name,
