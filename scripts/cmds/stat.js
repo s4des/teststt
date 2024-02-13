@@ -8,8 +8,8 @@ module.exports = {
     aliases: [],
     version: "1.0",
     author: "JARiF@Cock",
-    role: 2,
-    category: "owner",
+    role: 0,
+    category: "members",
     guide: {
       en: "Use {p}info"
     }
