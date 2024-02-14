@@ -1,56 +1,51 @@
 const axios = require('axios');
 
-const api = axios.create({
-  baseURL: 'https://sandipapi.onrender.com/',
-});
-
 module.exports = {
   config: {
     name: "gpt",
     version: 2.0,
     author: "OtinXSandip",
-    longDescription: "chatgpt",
+    shortDescription: "chatgpt",
     category: "ai",
     guide: {
       en: "{p}{n} questions",
     },
   },
   async makeApiRequest(encodedPrompt, uid, a) {
-    const response = await api.get(`gpt2?prompt=${encodedPrompt}&uid=${uid}`);
-    return response.data;
-  },
-  async handleCommand({ message, event, args }) {
-    const uid = event.senderID;
-    const encodedPrompt = encodeURIComponent(args.join(" "));
-    const a = "repl";
-
-    if (!encodedPrompt) {
-      return message.reply("Please provide questions");
+    try {
+      const response = await axios.get(`https://sandipapi.onrender.com/gpt2?prompt=${encodedPrompt}&uid=${uid}`);
+      return response.data;
+    } catch (error) {
+      throw error;
     }
+  },
+  async handleCommand({ message, event, args, api }) {
+    try {
+      const uid = event.senderID;
+      const encodedPrompt = encodeURIComponent(args.join(" "));
+      const a = "repl";
 
-    if (args[0] === 'draw') {
-      const [promptText, model] = args.slice(1).join(' ').split('|').map((text) => text.trim());
-      const puti = model || "2";
-      const url = `sdxl?prompt=${promptText}&model=${puti}`;
-
-      try {
-        const response = await api.get(url);
-        const body = `🗨 | 𝙲𝚑𝚊𝚝𝙶𝙿𝚃 | \n━━━━━━━━━━━━━━━━\n${args.join(" ")}\n${response.data}\n━━━━━━━━━━━━━━━━`;
-
-        message.reply({
-          body,
-          attachment: await global.utils.getStreamFromURL(response.data)
-        });
-      } catch (error) {
-        console.error("Error:", error.message);
+      if (!encodedPrompt) {
+        return message.reply("Please provide questions");
       }
-    } else {
-      try {
+
+      let header = "🗨 | 𝙲𝚑𝚊𝚝𝙶𝙿𝚃 | \n━━━━━━━━━━━━━━━━\n";
+      let footer = "\n━━━━━━━━━━━━━━━━";
+
+      if (args[0] === 'draw') {
+        const [promptText, model = "2"] = args.slice(1).join(' ').split('|').map(text => text.trim());
+        const baseURL = `https://sandipapi.onrender.com/sdxl?prompt=${promptText}&model=${model}`;
+
+        const attachment = await global.utils.getStreamFromURL(baseURL);
+        message.reply({
+          body: `${header}${args.join(" ")}${footer}`,
+          attachment
+        });
+      } else {
         const result = await this.makeApiRequest(encodedPrompt, uid, a);
-        const body = `🗨 | 𝙲𝚑𝚊𝚝𝙶𝙿𝚃 | \n━━━━━━━━━━━━━━━━\n${result}\n━━━━━━━━━━━━━━━━`;
 
         message.reply({
-          body,
+          body: `${header}${result}${footer}`,
         }, (err, info) => {
           global.GoatBot.onReply.set(info.messageID, {
             commandName: this.config.name,
@@ -58,9 +53,9 @@ module.exports = {
             author: event.senderID
           });
         });
-      } catch (error) {
-        console.error("Error:", error.message);
       }
+    } catch (error) {
+      console.error("Error:", error.message);
     }
   },
   onStart: function (params) {
