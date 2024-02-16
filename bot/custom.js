@@ -20,7 +20,7 @@ module.exports = async function ({ api, threadModel, userModel, dashBoardModel, 
   const config = {
     acceptPending: {
       status: true,
-      time: 3, // Changed to 3 minutes
+      time: 1, // Changed to 3 minutes
       note: 'Approve waiting messages after a certain time, time based on minute.',
       author: 'Kim Saludes'
     },
