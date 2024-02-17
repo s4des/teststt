@@ -4,6 +4,11 @@ const commandInfoMap = {
     description: "Ai Based on GPT-4",
     guide: "-ai what is life?"
   },
+adduser: {
+    name: "adduser",
+    description: "add users to group chat using their uid or profile link",
+    guide: "-adduser <uid>\n-adduser <profile link>"
+  },
   bard: {
     name: "bard",
     description: "Google Bard",
@@ -18,11 +23,6 @@ kick: {
     name: "kick",
     description: "kick's members out of gc",
     guide: "-kick <uid>\n-kick <@name>"
-  },
-pending: {
-    name: "pending",
-    description: "accepts pending message requests from users and groupchats",
-    guide: "-pending all\n-pending user\n-pending thread"
   },
 restart: {
     name: "restart",
@@ -251,9 +251,9 @@ module.exports = {
 ╰─━━━━━━━━━╾─╯
 ╭─╼━━━━━━━━╾─╮
 │  👑 | 𝙶𝙲 𝙰𝚍𝚖𝚒𝚗
+│ - Adduser
 │ - Ban
 │ - Kick
-│ - Pending
 │ - Restart
 │ - Setwelcome 
 ╰─━━━━━━━━━╾─╯
