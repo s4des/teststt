@@ -253,7 +253,6 @@ module.exports = {
 │  👑 | 𝙶𝙲 𝙰𝚍𝚖𝚒𝚗
 │ - Ban
 │ - Kick
-│ - Leaveall
 │ - Pending
 │ - Restart
 │ - Setwelcome 
