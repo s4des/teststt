@@ -24,11 +24,6 @@ pending: {
     description: "accepts pending message requests from users and groupchats",
     guide: "-pending all\n-pending user\n-pending thread"
   },
-leaveall: {
-    name: "leaveall",
-    description: "makes to bot to leave all existing groupchats in one go",
-    guide: "-leaveall"
-  },
 restart: {
     name: "restart",
     description: "restart the bot",
