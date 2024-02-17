@@ -5,7 +5,7 @@ aliases: ["outall"],
     version: "1.0",
     author: "otineeey",
     countDown: 5,
-    role: 1,
+    role: 2,
     shortDescription: {
       vi: "",
       en: ""
