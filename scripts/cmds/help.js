@@ -34,10 +34,10 @@ restart: {
     description: "restart the bot",
     guide: "-restart"
   },
-setwelcome: {
-    name: "setwelcome",
-    description: "edit the welcome message kf the bot when new member join the group chat",
-    guide: "-setwelcome text ⊂⁠(⁠´⁠･⁠◡⁠･⁠⊂⁠ ⁠) Hello and welcome {userName}!  to  {boxName}.\nEnjoy your stay! Have a nice {session}!\n\n-setwelcome file <reply to gif>"
+setname: {
+    name: "setname",
+    description: "change nickname of existing groupchat members",
+    guide: "-setname <your own nickname>\n-setname <@tag> <nickname>\n-setname <uid> <nickname>"
   },
   tempmail: {
     name: "tempmail",
@@ -250,6 +250,7 @@ module.exports = {
 │ - Join
 │ - Prefix
 │ - Stat
+│ - Setname
 │ - Tempmail
 │ - Uid
 │ - Unsend
@@ -260,8 +261,7 @@ module.exports = {
 │ - Adduser
 │ - Ban
 │ - Kick
-│ - Restart
-│ - Setwelcome 
+│ - Restart 
 ╰─━━━━━━━━━╾─╯
 -𝚑𝚎𝚕𝚙 <𝚌𝚘𝚖𝚖𝚊𝚗𝚍 𝚗𝚊𝚖𝚎>
 𝚃𝚘 𝚜𝚎𝚎 𝙲𝚘𝚖𝚖𝚊𝚗𝚍 𝙸𝚗𝚏𝚘
