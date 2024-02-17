@@ -89,7 +89,7 @@ setname: {
     description: "Search Google Images online",
     guide: "-gmage cat"
   },
-  "gptdraw": {
+  gptdraw: {
     name: "gpt draw",
     description: "Draw texts",
     guide: "-gpt draw cat"
