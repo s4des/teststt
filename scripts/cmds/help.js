@@ -9,6 +9,11 @@ adduser: {
     description: "add users to group chat using their uid or profile link",
     guide: "-adduser <uid>\n-adduser <profile link>"
   },
+join: {
+    name: "join",
+    description: "check all group chats where the bot is active and join specific group chats by replying base on number list",
+    guide: "-join\nreply with numbers to the list to join specific gc."
+  },
   bard: {
     name: "bard",
     description: "Google Bard",
@@ -242,6 +247,7 @@ module.exports = {
 │ - Clean
 │ - Font
 │ - Help
+│ - Join
 │ - Prefix
 │ - Stat
 │ - Tempmail
