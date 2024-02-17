@@ -8,7 +8,7 @@ module.exports = {
     version: "1.0",
     author: "Xemon",
     countDown: 5,
-    role: 2,
+    role: 1,
     shortDescription: "accept pending message",
     longDescription: "accept pending message",
     category: "owner",
