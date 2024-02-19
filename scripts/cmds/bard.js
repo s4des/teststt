@@ -1,58 +1,104 @@
 const axios = require('axios');
 
-module.exports = {
+const geminiApiKey = "AIzaSyAfIVJi4_LNydJCWNjthIoYgxHEZbCKN-M";
+
+const chatbot = {
   config: {
     name: "bard",
-    version: "1.0",
-    author: "rehat-- & Aliester Crowley",
-    countDown: 10,
-    role: 0,
-    longDescription: "google llm",
-    category: "ai",
-    guide: {
-      en: "{pn} <query>"
-    }
+    version: "2.0",
+    author: "Charlie",
+    description: "Generate Responses using Gemini | Vertex by Google LLMs",
   },
-  onStart: async function ({ message, event, api, args }) {
-    try {
-      const prompt = args.join(" ");
-      await this.handleAiRequest(api, event, prompt);
-    } catch (error) {
-      console.error(error);
-      api.setMessageReaction("❌", event.messageID, () => { }, true);
-    }
-  },
-  onChat: async function ({ api, event, args, message }) {
-    try {
-      const { body } = event;
 
-      if (body?.toLowerCase().startsWith("bard")) {
-        const prompt = body.substring(2).trim();
-        await this.handleAiRequest(api, event, prompt);
+  async makeGeminiApiRequest(userInput) {
+    try {
+      const response = await axios.post(
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent",
+        {
+          contents: [{
+            parts: [{
+              text: userInput
+            }]
+          }],
+        },
+        {
+          params: { key: geminiApiKey },
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      const generatedText = response.data.candidates[0].content.parts[0].text;
+      return generatedText;
+    } catch (error) {
+      console.error("Error making Gemini API request:", error.message);
+      throw error;
+    }
+  },
+
+  async handleCommand({ message, event, args, api }) {
+    try {
+      const uid = event.senderID;
+      const encodedPrompt = encodeURIComponent(args.join(" "));
+
+      if (!encodedPrompt) {
+        return message.reply("Please provide questions");
       }
+
+      const geminiResponse = await this.makeGeminiApiRequest(encodedPrompt);
+
+      message.reply({
+        body: `${geminiResponse}`,
+      }, (err, info) => {
+        global.GoatBot.onReply.set(info.messageID, {
+          commandName: this.config.name,
+          messageID: info.messageID,
+          author: uid,
+          prompt: encodedPrompt,
+          response: geminiResponse,
+        });
+      });
     } catch (error) {
-      console.error(error);
-      api.setMessageReaction("❌", event.messageID, () => { }, true);
+      console.error("Error handling command:", error.message);
     }
   },
-  async handleAiRequest(api, event, prompt) {
-    const llm = encodeURIComponent(prompt);
-    api.setMessageReaction("⌛", event.messageID, () => { }, true);
 
-    const res = await axios.get(`https://llama.aliestercrowley.com/api?prompt=${llm}`);
-    const result = res.data.response;
+  onStart: function (params) {
+    return this.handleCommand(params);
+  },
 
-    // Construct the response with header and footer
-    const response = `🗨 | 𝙶𝚘𝚘𝚐𝚕𝚎 𝙱𝚊𝚛𝚍 | 
-━━━━━━━━━━━━━━━━
-${result}
-━━━━━━━━━━━━━━━━`;
+  onReply: function (params) {
+    (async () => {
+      try {
+        const uid = params.event.senderID;
+        const context = global.GoatBot.onReply.get(params.messageID);
 
-    api.setMessageReaction("✅", event.messageID, () => { }, true);
+        if (context) {
+          const { prompt, response } = context;
+          const newPrompt = `${prompt} ${params.args.join(" ")}`;
 
-    // Send the response back to the user
-    api.sendMessage({
-      body: response
-    }, event.threadID, event.messageID);
-  }
+          const geminiResponse = await this.makeGeminiApiRequest(newPrompt);
+          global.GoatBot.onReply.set(params.messageID, {
+            ...context,
+            prompt: newPrompt,
+            response: geminiResponse,
+          });
+
+          params.message.reply({
+            body: `${geminiResponse}`,
+          });
+        } else {
+          this.handleCommand(params);
+        }
+      } catch (error) {
+        console.error("Error handling reply:", error.message);
+      }
+    })();
+  },
 };
+
+chatbot.onStart();
+
+module.exports = chatbot;
+    
