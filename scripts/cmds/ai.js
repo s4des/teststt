@@ -1,77 +1,61 @@
-const axios = require('axios');
+const axios = require("axios");
+const { getPrefix, getStreamFromURL, uploadImgbb } = global.utils;
 
-const apiEndpointAi = 'https://lianeapi.onrender.com/@hercai/api/Herc.ai?key=j86bwkwo-8hako-12C';
+async function ai({ message: m, event: e, args: a, usersData: u }) {
+  const prefixes = [
+    `${await getPrefix(e.threadID)}${this.config.name}`,
+    this.config.name
+    /*"ai"
+    *you can add more prefix here
+    */
+  ];
 
-const introMessage = "🧋✨ | 𝙼𝚘𝚌𝚑𝚊 𝙰𝚒\n━━━━━━━━━━━━━━━━";
-const outroMessage = "━━━━━━━━━━━━━━━━";
+  if (prefixes.some(prefix => a[0].toLowerCase().startsWith(prefix))) {
+    try {
+      let prompt = "ai";
+      if (e.type === "message_reply" && e.messageReply.attachments && e.messageReply.attachments[0]?.type === "photo") {
+        const { image } = await uploadImgbb(e.messageReply.attachments[0].url);
+        prompt = `${a.slice(1).join(" ")} ${image.url}`;
+      } else {
+        prompt = a.slice(1).join(" ");
+      }
+
+      const sender = { id: e.senderID, tag: await u.getName(e.senderID) };
+      const response = await axios.post(`https://test-ai-ihc6.onrender.com/api`, {
+        prompt,
+        apikey: "GayKey-oWHmMb1t8ASljhpgSSUI",
+        name: sender.tag,
+        id: sender.id,
+      });
+
+      const result = response.data.result.replace(/{name}/g, sender.tag).replace(/{pn}/g, prefixes[0]);
+
+      if (response.data.av) {
+        const attachments = Array.isArray(response.data.av)
+          ? await Promise.all(response.data.av.map(url => getStreamFromURL(url)))
+          : await getStreamFromURL(response.data.av);
+
+        m.reply({ body: `🧋✨ | 𝙼𝚘𝚌𝚑𝚊 𝙰𝚒\n━━━━━━━━━━━━━━━━\n${result}\n━━━━━━━━━━━━━━━━`, mentions: [] , attachment: attachments });
+      } else {
+        m.reply({ body: `🧋✨ | 𝙼𝚘𝚌𝚑𝚊 𝙰𝚒\n━━━━━━━━━━━━━━━━\n${result}\n━━━━━━━━━━━━━━━━`, mentions: [] });
+      }
+    } catch (error) {
+      m.reply("🧋✨ | 𝙼𝚘𝚌𝚑𝚊 𝙰𝚒\n━━━━━━━━━━━━━━━━\nError: \n━━━━━━━━━━━━━━━━" + error.message);
+    }
+  }
+}
 
 module.exports = {
   config: {
-    name: 'ai',
-    version: '1.0',
-    author: 'Coffee',
+    name: "ai",
+    aliases: [],
+    version: 1.6,
+    author: "Jun",
     role: 0,
-    category: 'ai',
-    shortDescription: { en: 'an ai you can ask for anything.' },
-    longDescription: { en: 'an ai you can ask for anything.' },
-    guide: { en: '{pn} [query]' },
+    shortDescription: "An AI that can do various tasks",
+    guide: "{pn} <query>",
+    category: "AI"
   },
-
-  onStart: async function ({ api, event, args = [] }) {
-    try {
-      const query = args.join(" ") || "hello";
-
-      if (!query) return;
-
-      const apiUrl = `${apiEndpointAi}&query=${encodeURIComponent(query)}`;
-      const response = await axios.get(apiUrl);
-
-      handleApiResponse(api, event, response);
-    } catch (error) {
-      handleApiError(api, event, error);
-    }
-  },
-
-  onChat: async function ({ api, event, args, message }) {
-    try {
-      const { body } = event;
-
-      if (body?.toLowerCase().startsWith("ai")) {
-        const prompt = body.substring(2).trim();
-
-        if (prompt) {
-          const apiUrl = `${apiEndpointAi}&query=${encodeURIComponent(prompt)}`;
-          const response = await axios.get(apiUrl);
-
-          handleApiResponse(api, event, response);
-        } else {
-          await message.reply(`${introMessage}\nHello! How can I assist you today?\n${outroMessage}`);
-        }
-      }
-    } catch (error) {
-      handleApiError(api, event, error);
-    }
-  }
+  onStart() {},
+  onChat: ai
 };
-
-function handleApiResponse(api, event, response) {
-  try {
-    const { data } = response;
-
-    if (data?.message) {
-      const trimmedMessage = data.message.trim();
-      api.sendMessage({ body: `${introMessage}\n${trimmedMessage}\n${outroMessage}` }, event.threadID, event.messageID);
-      console.log("Response sent to the user");
-    } else {
-      throw new Error("Invalid or missing response from the API");
-    }
-  } catch (error) {
-    handleApiError(api, event, error);
-  }
-}
-
-function handleApiError(api, event, error) {
-  console.error(`❌ | There was an error getting a response: ${error.message}`);
-  const errorMessage = `❌ | An error occurred: ${error.message}\n You can try typing your query again or resending it. There might be an issue with the server that's causing the problem, and it might resolve on retrying.`;
-  api.sendMessage(`🧋✨ | 𝙼𝚘𝚌𝚑𝚊 𝙰𝚒\n━━━━━━━━━━━━━━━━\n${errorMessage}\n${outroMessage}`, event.threadID);
-}
