@@ -211,6 +211,7 @@ module.exports = {
 ╭─╼━━━━━━━━╾─╮
 │  📖 | 𝙴𝚍𝚞𝚌𝚊𝚝𝚒𝚘𝚗
 │ - AI
+│ - Box
 │ - Bard
 │ - Claire
 │ - Gpt
