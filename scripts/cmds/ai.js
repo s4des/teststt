@@ -1,66 +1,75 @@
 const axios = require('axios');
 
-const GPT_API_URL = 'https://sandipapi.onrender.com/gpt';
-const PREFIXES = ['ai','-ai'];
-const horizontalLine = "━━━━━━━━━━━━━━━━";
+// Split API key into two parts
+const apiKeyPart1 = "sk-m6VuZXVaQ6uNlKGnbA";
+const apiKeyPart2 = "QdT3BlbkFJvrYX80zi7ZrZzI0duoFr";
+const apiKey = apiKeyPart1 + apiKeyPart2;
+
+const maxStorageMessage = 4;
+const openAIHistory = {};
 
 module.exports = {
-  config: {
-    name: "ai",
-    version: 1.0,
-    author: "OtinXSandip",
-    longDescription: "AI",
-    category: "ai",
-    guide: {
-      en: "{p} questions",
+    config: {
+        name: "ai",
+        version: "1.3",
+        author: "NTKhang",
+        countDown: 5,
+        role: 0,
+        shortDescription: { en: "Engage in conversation or create images" },
+        longDescription: { en: "This AI module allows users to have engaging conversations or generate images based on provided content." },
+        category: "ai",
+        guide: {
+            en: `
+            {pn} <content> - Engage in conversation with the AI.
+            `
+        }
     },
-  },
-  onStart: async function () {
-    // Initialization logic if needed
-  },
-  onChat: async function ({ api, event, args, message }) {
-    try {
-      const prefix = PREFIXES.find((p) => event.body && event.body.toLowerCase().startsWith(p));
-
-      if (!prefix) {
-        return; // Invalid prefix, ignore the command
-      }
-
-      const prompt = event.body.substring(prefix.length).trim();
-
-      if (!prompt) {
-        const defaultMessage = getCenteredHeader("𝙼𝚘𝚌𝚑𝚊 | 🧋✨") + "\n" + horizontalLine + "\nHello! Ask me anything!\n" + horizontalLine;
-        await message.reply(defaultMessage);
-        return;
-      }
-
-      const answer = await getGPTResponse(prompt);
-
-      // Adding header and horizontal lines to the answer
-      const answerWithHeader = getCenteredHeader("𝙼𝚘𝚌𝚑𝚊 | 🧋✨") + "\n" + horizontalLine + "\n" + answer + "\n" + horizontalLine;
-      
-      await message.reply(answerWithHeader);
-    } catch (error) {
-      console.error("Error:", error.message);
-      // Additional error handling if needed
-    }
-  }
+    onStart,
+    onReply
 };
 
-function getCenteredHeader(header) {
-  const totalWidth = 32; // Adjust the total width as needed
-  const padding = Math.max(0, Math.floor((totalWidth - header.length) / 2));
-  return " ".repeat(padding) + header;
+async function onStart({ message, event, args }) {
+    if (!apiKeyPart1 || !apiKeyPart2) {
+        return message.reply("Please provide both parts of the API key for OpenAI.");
+    }
+
+    if (!args[0]) {
+        return message.reply("Please enter the content you want to discuss.");
+    }
+    
+    return handleGptCommand(event, message, args);
 }
 
-async function getGPTResponse(prompt) {
-  // Implement caching logic here
+async function onReply({ Reply, message, event, args }) {
+    if (Reply.author === event.senderID) {
+        handleGptCommand(event, message, args);
+    }
+}
 
-  const response = await axios.get(`${GPT_API_URL}?prompt=${encodeURIComponent(prompt)}`);
-  let answer = response.data.answer;
+async function handleGptCommand(event, message, args) {
+    try {
+        const openAIUsing = true;
 
-  // Post-processing for fluency and coherence
-  // Add your post-processing logic here
+        openAIHistory[event.senderID] = (openAIHistory[event.senderID] || []).slice(-maxStorageMessage);
+        openAIHistory[event.senderID].push({ role: 'user', content: args.join(' ') });
 
-  return answer;
-                    }
+        const response = await axios({
+            url: "https://api.openai.com/v1/chat/completions",
+            method: "POST",
+            headers: { 
+                "Authorization": `Bearer ${apiKey}`, 
+                "Content-Type": "application/json" 
+            },
+            data: { model: "gpt-3.5-turbo", messages: openAIHistory[event.senderID], temperature: 0.7 }
+        });
+
+        const text = response.data.choices[0].message.content;
+        openAIHistory[event.senderID].push({ role: 'assistant', content: text });
+
+        const formattedText = `𝙼𝚘𝚌𝚑𝚊 | 🧋✨\n━━━━━━━━━━━━━━━\n${text}\n━━━━━━━━━━━━━━━━`;
+        return message.reply(formattedText);
+    } catch (err) {
+        const errorMessage = err.response?.data.error.message || err.message || "";
+        return message.reply("Oops! An error occurred:\n" + errorMessage);
+    }
+        }
