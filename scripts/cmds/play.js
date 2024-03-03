@@ -35,7 +35,7 @@ module.exports = {
       const searchResults = await yts(songName);
       const video = searchResults.videos[0];
       const videoUrl = video.url;
-      const stream = ytdl(videoUrl, { filter: "audioonly" });
+      const stream = ytdl(videoUrl, { filter: "audioonly", quality: 'lowestaudio' }); // Download lowest audio quality
       const fileName = `music.mp3`;
       const filePath = `${__dirname}/tmp/${fileName}`;
 
@@ -43,7 +43,7 @@ module.exports = {
 
       stream.on('end', async () => {
         if (await isFileSizeWithinLimit(filePath)) {
-          await handleLyrics(api, event, video, filePath, songName);
+          await handleLyrics(api, event, video, filePath, songName, event.messageID); // Pass event.messageID to handleLyrics
         } else {
           fs.unlink(filePath, (err) => {
             if (err) {
@@ -60,7 +60,7 @@ module.exports = {
   },
 };
 
-async function handleLyrics(api, event, video, filePath, songName) {
+async function handleLyrics(api, event, video, filePath, songName, messageID) { // Add messageID parameter
   const apiUrl = `https://lyrist.vercel.app/api/${encodeURIComponent(songName)}`;
 
   try {
@@ -69,9 +69,9 @@ async function handleLyrics(api, event, video, filePath, songName) {
 
     const lyricsWithTitle = `🎧 | Title: ${title}\n🎤 | Artist: ${artist}\n\n${lyrics || "Sorry, lyrics not found!"}`;
 
-    const sendLyricsPromise = api.sendMessage(lyricsWithTitle, event.threadID);
+    const sendLyricsPromise = api.sendMessage(lyricsWithTitle, event.threadID, messageID); // Reply to the message that triggered the request
     const sendSongPromise = api.sendMessage({
-      body: "Now playing:",
+      body: "",
       attachment: fs.createReadStream(filePath),
     }, event.threadID);
 
@@ -96,4 +96,5 @@ async function isFileSizeWithinLimit(filePath) {
     console.error('[ERROR]', 'Failed to get file stats:', error);
     return false;
   }
-    }
+      }
+          
