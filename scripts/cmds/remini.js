@@ -10,7 +10,7 @@ module.exports = {
     cooldowns: 5,
     role: 0,
     shortDescription: {
-      en: "remini filter"
+      en: "enhance image"
     },
     longDescription: {
       en: "remini filter"
@@ -43,7 +43,7 @@ module.exports = {
 
     api.sendMessage("⊂⁠(⁠・⁠﹏⁠・⁠⊂⁠) | Please wait...", threadID, async () => {
       try {
-        const response = await axios.get(`https://code-merge-api-hazeyy01.replit.app/api/try/remini?url=${encodeURIComponent(photoUrl)}`);
+        const response = await axios.get(`https://hazeyy-merge-apis-b924b22feb7b.herokuapp.com/api/try/remini?url=${encodeURIComponent(photoUrl)}`);
         const processedImageURL = response.data.image_data;
 
         // Fetch the processed image
