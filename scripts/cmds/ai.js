@@ -1,34 +1,63 @@
 const axios = require('axios');
 
+async function fetchFromAI(url, params) {
+  try {
+    const response = await axios.get(url, { params });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+async function getAIResponse(input, userId, messageID) {
+  const services = [
+    { url: 'https://ai-tools.replit.app/gpt', params: { prompt: input, uid: userId } },
+    { url: 'https://openaikey-x20f.onrender.com/api', params: { prompt: input } },
+    { url: 'http://fi3.bot-hosting.net:20265/api/gpt', params: { question: input } },
+    { url: 'https://ai-chat-gpt-4-lite.onrender.com/api/hercai', params: { question: input } }
+  ];
+
+  let response = "Error: No response from AI services.";
+  let currentIndex = 0;
+
+  for (let i = 0; i < services.length; i++) {
+    const service = services[currentIndex];
+    const data = await fetchFromAI(service.url, service.params);
+    if (data && (data.gpt4 || data.reply || data.response)) {
+      response = data.gpt4 || data.reply || data.response;
+      break;
+    }
+    currentIndex = (currentIndex + 1) % services.length; // Move to the next service in the cycle
+  }
+
+  return { response, messageID };
+}
+
 module.exports = {
   config: {
-    name: "ai",
-    version: "1.0.0",
-    author: "KENLIEPLAYS",
-    longDescription: "AI by KENLIEPLAYS",
-    category: "ai",
-    guide: { en: "{prefix}gpt [ask]" },
+    name: 'ai',
+    author: 'coffee',
+    role: 0,
+    category: 'ai',
+    shortDescription: 'ai to ask anything',
   },
   onStart: async function ({ api, event, args }) {
-    const userId = event.senderID;
-    const content = encodeURIComponent(args.join(" "));
+    const input = args.join(' ').trim();
+    if (!input) {
+      api.sendMessage(`🧋✨ | 𝙼𝚘𝚌𝚑𝚊 𝙰𝚒\n━━━━━━━━━━━━━━━━\nPlease provide a question or statement.\n━━━━━━━━━━━━━━━━`, event.threadID, event.messageID);
+      return;
+    }
 
-    if (!args[0]) return api.sendMessage("🧋✨ | 𝙼𝚘𝚌𝚑𝚊 𝙰𝚒\n━━━━━━━━━━━━━━━━\nPlease type a message...\n━━━━━━━━━━━━━━━━", event.threadID, event.messageID);
-
-    try {
-      const response = await axios.get(`https://ai-tools.replit.app/gpt?prompt=${content}&uid=${encodeURIComponent(userId)}`);
-      let replyMessage = response.data.gpt4;
-
-      if (response.data.error) {
-        replyMessage = `🧋✨ | 𝙼𝚘𝚌𝚑𝚊 𝙰𝚒\n━━━━━━━━━━━━━━━━\nError: ${response.data.error}\n━━━━━━━━━━━━━━━━`;
-      } else {
-        replyMessage = `🧋✨ | 𝙼𝚘𝚌𝚑𝚊 𝙰𝚒\n━━━━━━━━━━━━━━━━\n${replyMessage}\n━━━━━━━━━━━━━━━━`;
-      }
-      
-      api.sendMessage(replyMessage, event.threadID, event.messageID); // Reply to the message that triggered the request
-    } catch (error) {
-      console.error(error);
-      api.sendMessage("🧋✨ | 𝙼𝚘𝚌𝚑𝚊 𝙰𝚒\n━━━━━━━━━━━━━━━━\nAn error occurred while fetching the data.\n━━━━━━━━━━━━━━━━", event.threadID);
+    const { response, messageID } = await getAIResponse(input, event.senderID, event.messageID);
+    api.sendMessage(`🧋✨ | 𝙼𝚘𝚌𝚑𝚊 𝙰𝚒\n━━━━━━━━━━━━━━━━\n${response}\n━━━━━━━━━━━━━━━━`, event.threadID, messageID);
+  },
+  onChat: async function ({ event, message }) {
+    const messageContent = event.body.trim().toLowerCase();
+    if (messageContent.startsWith("ai")) {
+      const input = messageContent.replace(/^ai\s*/, "").trim();
+      const { response, messageID } = await getAIResponse(input, event.senderID, message.messageID);
+      message.reply(`🧋✨ | 𝙼𝚘𝚌𝚑𝚊 𝙰𝚒\n━━━━━━━━━━━━━━━━\n${response}\n━━━━━━━━━━━━━━━━`, messageID);
     }
   }
 };
