@@ -14,6 +14,11 @@ join: {
     description: "check all group chats where the bot is active and join specific group chats by replying base on number list",
     guide: "-join\nreply with numbers to the list to join specific gc."
   },
+  video: {
+    name: "video",
+    description: "searches and sends youtube video (mostly use between 1-7mins)",
+    guide: "-video <video title>"
+  },
   bard: {
     name: "bard",
     description: "Google Bard",
@@ -242,6 +247,8 @@ module.exports = {
 │ - Play
 │ - Song
 │ - Spotify
+│ - Video
+│ - Shoti 
 ╰─━━━━━━━━━╾─╯
 ╭─╼━━━━━━━━╾─╮
 │  👥 | 𝙼𝚎𝚖𝚋𝚎𝚛𝚜
