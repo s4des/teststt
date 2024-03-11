@@ -129,12 +129,7 @@ setname: {
     description: "Fetches lyrics of a song",
     guide: "-lyrics perfect by ed sheeran"
   },
-  play: {
-    name: "play",
-    description: "plays a song with lyrics",
-    guide: "-play perfect by ed sheeran"
-  },
-  song: {
+ song: {
     name: "song",
     description: "plays a song",
     guide: "-song perfect by ed sheeran"
@@ -244,7 +239,6 @@ module.exports = {
 │  🎧 | 𝙼𝚞𝚜𝚒𝚌
 │ - Chords 
 │ - Lyrics
-│ - Play
 │ - Song
 │ - Spotify
 │ - Video
