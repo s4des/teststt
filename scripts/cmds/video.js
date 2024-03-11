@@ -1,72 +1,79 @@
-module.exports = {
-  config: {
-    name: "video",
-    version: "1.0",
-    author: "kshitiz",
-    cooldowns: 40,
-    shortdescription: "send YouTube video",
-    category: "media",
-    usages: "{pn} video name",
-    dependencies: {
-      "fs-extra": "",
-      "request": "",
-      "axios": "",
-      "ytdl-core": "",
-      "yt-search": ""
-    }
-  },
+const axios = require("axios");
+const fs = require('fs-extra');
+const path = require('path');
+const { getStreamFromURL, shortenURL, randomString } = global.utils;
+const ytdl = require("ytdl-core");
+const yts = require("yt-search");
 
-  onStart: async ({ api, event }) => {
-    const fs = require("fs-extra");
-    const ytdl = require("@neoxr/ytdl-core");
-    const yts = require("yt-search");
-
-    const input = event.body;
-    const data = input.split(" ");
-
-    if (data.length < 2) {
-      return api.sendMessage("Please specify a video name.", event.threadID);
-    }
-
-    data.shift();
-    const videoName = data.join(" ");
-
+async function video(api, event, args, message) {
+    api.setMessageReaction("🕢", event.messageID, (err) => {}, true);
     try {
-      api.sendMessage(`🕰️ | your video is loading...`, event.threadID);
+        let title = '';
 
-      const searchResults = await yts(videoName);
-      if (!searchResults.videos.length) {
-        return api.sendMessage("No video found.", event.threadID, event.messageID);
-      }
-
-      const video = searchResults.videos[0];
-      const videoUrl = video.url;
-
-      const stream = ytdl(videoUrl, { filter: "audioandvideo" });
-
-      const fileName = `${event.senderID}.mp4`;
-      const filePath = __dirname + `/tmp/${fileName}`;
-
-      stream.pipe(fs.createWriteStream(filePath));
-
-      stream.on('end', () => {
-        if (fs.statSync(filePath).size > 26214400) {
-          fs.unlinkSync(filePath);
-          return api.sendMessage('The file could not be sent because it is larger than 25MB.', event.threadID);
-        }
-
-        const message = {
-          body: `📹 | Title: ${video.title}`,
-          attachment: fs.createReadStream(filePath)
+        const extractShortUrl = async () => {
+            const attachment = event.messageReply.attachments[0];
+            if (attachment.type === "video" || attachment.type === "audio") {
+                return attachment.url;
+            } else {
+                throw new Error("Invalid attachment type.");
+            }
         };
 
-        api.sendMessage(message, event.threadID, () => {
-          fs.unlinkSync(filePath);
+        if (event.messageReply && event.messageReply.attachments && event.messageReply.attachments.length > 0) {
+            const shortUrl = await extractShortUrl();
+            const musicRecognitionResponse = await axios.get(`https://youtube-music-sooty.vercel.app/kshitiz?url=${encodeURIComponent(shortUrl)}`);
+            title = musicRecognitionResponse.data.title;
+        } else if (args.length === 0) {
+            message.reply("Please provide a video name.");
+            return;
+        } else {
+            title = args.join(" ");
+        }
+
+        const searchResults = await yts(title);
+        if (!searchResults.videos.length) {
+            message.reply("No video found for the given query.");
+            return;
+        }
+
+        const videoUrl = searchResults.videos[0].url;
+        const stream = await ytdl(videoUrl, { filter: "audioandvideo" });
+
+        const fileName = `puti.mp4`; 
+        const filePath = path.join(__dirname, "cache", fileName);
+        const writer = fs.createWriteStream(filePath);
+
+        stream.pipe(writer);
+
+        writer.on('finish', () => {
+            const videoStream = fs.createReadStream(filePath); 
+            message.reply({ body: `📹 Playing: ${title}`, attachment: videoStream });
+            api.setMessageReaction("✅", event.messageID, () => {}, true);
         });
-      });
+
+        writer.on('error', (error) => {
+            console.error("Error:", error);
+            message.reply("error");
+        });
     } catch (error) {
-      console.error('[ERROR]', error);
-      api.sendMessage(' An error occurred while processing the command.', event.threadID);
+        console.error("Error:", error);
+        message.reply("error");
     }
-  }
+}
+
+module.exports = {
+    config: {
+        name: "video", 
+        version: "1.0",
+        author: "Kshitiz",
+        countDown: 10,
+        role: 0,
+        shortDescription: "play video from youtube",
+        longDescription: "play video from youtube support audio recogonization.",
+        category: "music",
+        guide: "{p} video videoname / reply to audio or vdo" 
+    },
+    onStart: function ({ api, event, args, message }) {
+        return video(api, event, args, message);
+    }
 };
