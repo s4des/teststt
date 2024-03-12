@@ -274,7 +274,7 @@ module.exports = {
 
 Example: -help bard
 
-𝗢𝘄𝗻𝗲𝗿: https://www.facebook.com/charliesbb.74
+𝗢𝘄𝗻𝗲𝗿: https://www.facebook.com/incognitotab.dev
 ━━━━━━━━━━━━━━━━`;
 
       return message.reply(commandsList);
