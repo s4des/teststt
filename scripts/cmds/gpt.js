@@ -9,7 +9,7 @@ const config = {
   name: "gpt",
   aliases: ["chatgpt"],
   version: "3.0",
-  author: "kshitiz",
+  author: "Charlie",
   countDown: 5,
   role: 0,
   longDescription: "Chat with GPT-4",
