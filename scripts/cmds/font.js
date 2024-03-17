@@ -378,7 +378,7 @@ module.exports = {
   config: {
     name: 'font',
     version: '1.0',
-    author: 'Coffee',
+    author: 'Charlie',
     countDown: 0,
     role: 0, // Set role to 0 for public access
     shortDescription: 'Convert text to different fonts',
