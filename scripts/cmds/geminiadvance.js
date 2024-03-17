@@ -1,5 +1,5 @@
 const axios = require('axios');
-const api = `https://gemini-api.replit.app`;
+const apii = `https://gemini-api.replit.app`;
 module.exports = {
   config: {
     name: 'geminiadvance',
@@ -16,13 +16,13 @@ module.exports = {
   if (event.type == "message_reply"){
         if (event.messageReply.attachments[0]?.type == "photo"){
         url = encodeURIComponent(event.messageReply.attachments[0].url);
-        const res = (await axios.get(api + "/gemini?prompt="+prompt+"&url="+url+"&uid="+uid)).data;
+        const res = (await axios.get(apii + "/gemini?prompt="+prompt+"&url="+url+"&uid="+uid)).data;
         return message.reply(res.gemini)
         } else {
           return message.reply('Please reply to an image.')
         }
       }
-      const rest = (await axios.get(api + "/gemini?prompt=" + prompt + "&uid=" + uid)).data;
+      const rest = (await axios.get(apii + "/gemini?prompt=" + prompt + "&uid=" + uid)).data;
       return message.reply(rest.gemini)
   }
-                    }
+}
