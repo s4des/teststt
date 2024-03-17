@@ -3,7 +3,7 @@ const apii = `https://gemini-api.replit.app`;
 module.exports = {
   config: {
     name: 'geminiadvance',
-    author: 'Deku',
+    author: 'Charlie, API by Deku',
     role: 0,
     category: 'ai',
     shortDescription: 'gemini (conversational)',
