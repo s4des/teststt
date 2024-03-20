@@ -1,76 +1,41 @@
-const axios = require("axios");
-const tinyurl = require("tinyurl");
-
-const API_BASE_URL = "https://api-samir.onrender.com";
-const HEADER = "👩‍💻 | 𝙶𝚎𝚖𝚒𝚗𝚒 | \n━━━━━━━━━━━━━━━━";
-const FOOTER = "━━━━━━━━━━━━━━━━";
-
-async function makeRequest(url) {
-  try {
-    const response = await axios.get(url);
-    return response.data;
-  } catch (error) {
-    console.error("Error:", error.message);
-    throw error;
-  }
-}
-
-async function shortenUrl(url) {
-  return await tinyurl.shorten(url);
-}
-
 module.exports = {
-  config: {
-    name: "gemini",
-    version: "1.0",
-    author: "Samir OE",
-    shortDescription: "Google Gemini",
-    countDown: 5,
-    role: 0,
-    category: "ai",
-  },
+	config: {
+		name: 'gemini',
+		version: '2.5.4',
+		author: 'Deku', // credits owner of this api
+		role: 0,
+		category: 'bard',
+		shortDescription: {
+			en: 'Talk to Gemini (conversational).',
+		},
+		guide: {
+			en: '{pn} [prompt]',
+		},
+	},
 
-  async onStart({ message, event, args }) {
-    try {
-      let shortLink;
-
-      if (event.type === "message_reply" && ["photo", "sticker"].includes(event.messageReply?.attachments?.[0]?.type)) {
-        shortLink = await shortenUrl(event.messageReply.attachments[0].url);
-      } else {
-        const text = encodeURIComponent(args.join(' '));
-        const response = await makeRequest(`${API_BASE_URL}/Gemini?text=${text}`);
-
-        if (response?.candidates?.length > 0) {
-          const answer = `${HEADER}\n${response.candidates[0].content.parts[0].text}\n${FOOTER}`;
-          message.reply({ body: answer });
-          return;
-        }
-      }
-
-      if (!shortLink) throw new Error("Invalid message or attachment type");
-
-      const likeResponse = await makeRequest(`${API_BASE_URL}/telegraph?url=${encodeURIComponent(shortLink)}&senderId=Y=777565`);
-      const visionResponse = await makeRequest(`${API_BASE_URL}/gemini-pro?text=${encodeURIComponent(args.join(' '))}&url=${encodeURIComponent(likeResponse.result.link)}`);
-      const answer = `${HEADER}\n${visionResponse}\n${FOOTER}`;
-      message.reply({ body: answer });
-    } catch (error) {
-      console.error("Error:", error.message);
-    }
-  },
-
-  async onReply({ message, event, Reply, args }) {
-    try {
-      const { author, commandName } = Reply;
-      if (event.senderID !== author) return;
-
-      const response = await makeRequest(`${API_BASE_URL}/Gemini?text=${encodeURIComponent(args.join(' '))}`);
-
-      if (response?.candidates?.length > 0) {
-        const answer = `${HEADER}\n${response.candidates[0].content.parts[0].text}\n${FOOTER}`;
-        message.reply({ body: answer });
-      }
-    } catch (error) {
-      console.error("Error:", error.message);
-    }
-  },
+	onStart: async function ({ api, event, args }) {
+		const axios = require("axios");
+		let prompt = args.join(" "),
+			uid = event.senderID,
+			url;
+		if (!prompt) return api.sendMessage(`Please enter a prompt.`, event.threadID);
+		api.sendTypingIndicator(event.threadID);
+		try {
+			const geminiApi = `https://gemini-api.replit.app`;
+			if (event.type == "message_reply") {
+				if (event.messageReply.attachments[0]?.type == "photo") {
+					url = encodeURIComponent(event.messageReply.attachments[0].url);
+					const res = (await axios.get(`${geminiApi}/gemini?prompt=${prompt}&url=${url}&uid=${uid}`)).data;
+					return api.sendMessage(res.gemini, event.threadID);
+				} else {
+					return api.sendMessage('Please reply to an image.', event.threadID);
+				}
+			}
+			const response = (await axios.get(`${geminiApi}/gemini?prompt=${prompt}&uid=${uid}`)).data;
+			return api.sendMessage(response.gemini, event.threadID);
+		} catch (error) {
+			console.error(error);
+			return api.sendMessage('❌ | An error occurred. You can try typing your query again or resending it. There might be an issue with the server that\'s causing the problem, and it might resolve on retrying.', event.threadID);
+		}
+	}
 };
