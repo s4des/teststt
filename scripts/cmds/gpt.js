@@ -2,8 +2,21 @@ const axios = require('axios');
 const fs = require('fs-extra');
 const path = require('path');
 
-const responseHeader = "🗨 | 𝙲𝚑𝚊𝚝𝙶𝙿𝚃 | ━━━━━━━━━━━━━━━━";
-const responseFooter = "━━━━━━━━━━━━━━━━";
+async function lado(api, event, args, message) {
+  try {
+    message.reply("🗨 | 𝙲𝚑𝚊𝚝𝙶𝙿𝚃 | \n━━━━━━━━━━━━━━━━\nSorry, but this functionality has been disabled.\n━━━━━━━━━━━━━━━━");
+  } catch (error) {
+    handleErrorMessage(error, message);
+  }
+}
+
+async function kshitiz(api, event, args, message) {
+  try {
+    message.reply("🗨 | 𝙲𝚑𝚊𝚝𝙶𝙿𝚃 | \n━━━━━━━━━━━━━━━━\nSorry, but this functionality has been disabled.\n━━━━━━━━━━━━━━━━");
+  } catch (error) {
+    handleErrorMessage(error, message);
+  }
+}
 
 const config = {
   name: "gpt",
@@ -19,21 +32,21 @@ const config = {
   }
 };
 
-async function generateText(prompt, uid) {
+async function getGPTResponse(prompt, uid) {
   try {
     const response = await axios.get(`https://ai-tools.replit.app/gpt?prompt=${encodeURIComponent(prompt)}&uid=${uid}&apikey=kshitiz`);
     return response.data.gpt4;
   } catch (error) {
-    throw new Error("Failed to generate text. Please try again later.");
+    throw new Error("Failed to fetch GPT response");
   }
 }
 
-async function generateImage(prompt) {
+async function getImage(prompt) {
   try {
     const response = await axios.get(`https://ai-tools.replit.app/sdxl?prompt=${encodeURIComponent(prompt)}&styles=7`, { responseType: 'arraybuffer' });
     return response.data;
   } catch (error) {
-    throw new Error("Failed to generate image. Please try again later.");
+    throw new Error("Failed to fetch image");
   }
 }
 
@@ -42,35 +55,55 @@ async function describeImage(prompt, photoUrl) {
     const response = await axios.get(`https://sandipbaruwal.onrender.com/gemini2?prompt=${encodeURIComponent(prompt)}&url=${encodeURIComponent(photoUrl)}`);
     return response.data.answer;
   } catch (error) {
-    throw new Error("Failed to describe image. Please try again later.");
+    throw new Error("Failed to describe image");
   }
 }
 
 async function handleCommand({ api, message, event, args }) {
   try {
-    const uid = event.senderID;
-    const prompt = args.join(" ").trim();
-    const isDrawCommand = args[0]?.toLowerCase() === "draw";
-
-    if (!prompt) {
-      return message.reply("Please provide a prompt.");
-    }
-
-    if (isDrawCommand) {
-      const imageData = await generateImage(prompt);
-      const imagePath = path.join(__dirname, 'tmp', `image_${Date.now()}.png`);
-      await fs.writeFile(imagePath, imageData);
-      message.reply({ body: responseHeader, attachment: fs.createReadStream(imagePath), footer: responseFooter });
-    } else {
-      const text = await generateText(prompt, uid);
-      message.reply(`${responseHeader}\n${text}\n${responseFooter}`, (reply, threadID) => {
-        global.GoatBot.onReply.set(threadID, { commandName: config.name, uid });
-      });
+    const { senderID } = event;
+    const [command, ...commandArgs] = args.map(arg => arg.toLowerCase().trim());
+    
+    switch (command) {
+      case "draw":
+        await drawImage(message, commandArgs.join(" "));
+        break;
+      case "prompt":
+        if (event.messageReply && event.messageReply.attachments && event.messageReply.attachments.length > 0) {
+          const photoUrl = event.messageReply.attachments[0].url;
+          const description = await describeImage(commandArgs.join(" "), photoUrl);
+          message.reply(`🗨 | 𝙲𝚑𝚊𝚝𝙶𝙿𝚃 | \n━━━━━━━━━━━━━━━━\nDescription: ${description}\n━━━━━━━━━━━━━━━━`);
+        } else {
+          message.reply("🗨 | 𝙲𝚑𝚊𝚝𝙶𝙿𝚃 | \n━━━━━━━━━━━━━━━━\nPlease reply to an image to describe it.\n━━━━━━━━━━━━━━━━");
+        }
+        break;
+      default:
+        const gptResponse = await getGPTResponse(args.join(" "), senderID);
+        message.reply(`🗨 | 𝙲𝚑𝚊𝚝𝙶𝙿𝚃 | \n━━━━━━━━━━━━━━━━\n${gptResponse}\n━━━━━━━━━━━━━━━━`);
+        break;
     }
   } catch (error) {
-    console.error("Error:", error.message);
-    message.reply("An error occurred while processing the request.");
+    handleErrorMessage(error, message);
   }
+}
+
+async function drawImage(message, prompt) {
+  try {
+    const image = await getImage(prompt);
+    const imagePath = path.join(__dirname, 'cache', `image_${Date.now()}.png`);
+    fs.writeFileSync(imagePath, image);
+    message.reply({
+      body: "🗨 | 𝙲𝚑𝚊𝚝𝙶𝙿𝚃 | \n━━━━━━━━━━━━━━━━\nGenerated image:\n━━━━━━━━━━━━━━━━",
+      attachment: fs.createReadStream(imagePath)
+    });
+  } catch (error) {
+    handleErrorMessage(error, message);
+  }
+}
+
+function handleErrorMessage(error, message) {
+  console.error("Error:", error.message);
+  message.reply(`🗨 | 𝙲𝚑𝚊𝚝𝙶𝙿𝚃 | \n━━━━━━━━━━━━━━━━\nAn error occurred while processing the request.\n━━━━━━━━━━━━━━━━`);
 }
 
 module.exports = {
