@@ -15,6 +15,6 @@ onChat: async function({
 	message,
 	getLang
 }) {
-	if (event.body && event.body.toLowerCase() == "hi", "@everyone", "everyone") return message.reply("hello love, how can i help you?", "sig mention oy linte", "ano na naman?");
+	if (event.body && event.body.toLowerCase() == "@everyone") return message.reply("Samoka uy linte");
 }
 };
