@@ -64,7 +64,7 @@ module.exports = {
 		let areaKey, dataWeather, areaName;
 
 		try {
-			const response = (await axios.get(`https://api.accuweather.com/locations/v1/cities/search.json?q=${encodeURIComponent(area)}&apikey=${apikey}&language=vi-vn`)).data;
+			const response = (await axios.get(`https://api.accuweather.com/locations/v1/cities/search.json?q=${encodeURIComponent(area)}&apikey=${apikey}&language=en-us`)).data;
 			if (response.length == 0)
 				return message.reply(getLang("notFound", area));
 			const data = response[0];
@@ -76,7 +76,7 @@ module.exports = {
 		}
 
 		try {
-			dataWeather = (await axios.get(`http://api.accuweather.com/forecasts/v1/daily/10day/${areaKey}?apikey=${apikey}&details=true&language=vi`)).data;
+			dataWeather = (await axios.get(`http://api.accuweather.com/forecasts/v1/daily/10day/${areaKey}?apikey=${apikey}&details=true&language=en`)).data;
 		}
 		catch (err) {
 			return message.reply(`❌ Đã xảy ra lỗi: ${err.response.data.Message}`);
