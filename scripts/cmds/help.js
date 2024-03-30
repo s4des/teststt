@@ -184,6 +184,51 @@ setname: {
     description: "Shows how many hours the bot is running",
     guide: "-uptime"
   },
+    ngl: {
+    name: "ngl",
+    description: "Ngl spamming ☠️",
+    guide: "/ngl [username] [message] [amount]"
+  },
+    stalk: {
+    name: "stalk",
+    description: "Stalk user",
+    guide: "/stalk [uid]"
+  },
+    fbpost: {
+    name: "fbpost",
+    description: "Auto post",
+    guide: "secret"
+  },
+    hack: {
+    name: "hack",
+    description: "Hack user",
+    guide: "/hack [mention] [uid]"
+  },
+    thread: {
+    name: "thread",
+    description: "Shows the thread where the bot is active",
+    guide: "/thread"
+  },
+    file: {
+    name: "file",
+    description: "Show code file",
+    guide: "/file [cmd]"
+  },
+    obfuscate: {
+    name: "obfuscate",
+    description: "Obfuscate or encrypt js code",
+    guide: "/ob [code]"
+  },
+    helpall: {
+    name: "helpall",
+    description: "Show all command info",
+    guide: "/helpall"
+  },
+    pending: {
+    name: "pending",
+    description: "Shows all pending thread or message",
+    guide: "secret *//just for admin"
+  },
 };
 
 module.exports = {
@@ -241,8 +286,7 @@ module.exports = {
 │ - Lyrics
 │ - Song
 │ - Spotify
-│ - Video
-│ - Shoti 
+│ - Video 
 ╰─━━━━━━━━━╾─╯
 ╭─╼━━━━━━━━╾─╮
 │  👥 | 𝙼𝚎𝚖𝚋𝚎𝚛𝚜
@@ -261,9 +305,12 @@ module.exports = {
 │ - Shoti
 │ - Weather
 │ - Info
+│ - Hack
+│ - Helpall
+│ - Stalk
 ╰─━━━━━━━━━╾─╯
 ╭─╼━━━━━━━━╾─╮
-│  👑 | 𝙶𝙲 𝙰𝚍𝚖𝚒𝚗
+│  👑 | 𝙰𝚍𝚖𝚒𝚗 Bot
 │ - Adduser
 │ - Ban
 │ - Kick
@@ -271,6 +318,11 @@ module.exports = {
 │ - Leave
 │ - User
 │ - Thread
+│ - Ngl
+│ - Pending
+│ - File
+│ - Obfuscate
+│ - Fbpost
 ╰─━━━━━━━━━╾─╯
 -𝚑𝚎𝚕𝚙 <𝚌𝚘𝚖𝚖𝚊𝚗𝚍 𝚗𝚊𝚖𝚎>
 𝚃𝚘 𝚜𝚎𝚎 𝙲𝚘𝚖𝚖𝚊𝚗𝚍 𝙸𝚗𝚏𝚘
