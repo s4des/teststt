@@ -274,7 +274,6 @@ module.exports = {
 │ - Dalle
 │ - Image
 │ - Gmage
-│ - Gpt Draw
 │ - Pinterest
 │ - Pinterest2
 │ - Prodia
@@ -323,7 +322,8 @@ module.exports = {
 │ - File
 │ - Obfuscate
 │ - Fbpost
-│ - Antiout 
+│ - Antiout
+│ - Bio
 ╰─━━━━━━━━━╾─╯
 -𝚑𝚎𝚕𝚙 <𝚌𝚘𝚖𝚖𝚊𝚗𝚍 𝚗𝚊𝚖𝚎>
 𝚃𝚘 𝚜𝚎𝚎 𝙲𝚘𝚖𝚖𝚊𝚗𝚍 𝙸𝚗𝚏𝚘
