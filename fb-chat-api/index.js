@@ -138,12 +138,13 @@ function buildAPI(globalOptions, html, jar) {
 
 	// All data available to api functions
 	const ctx = {
-		userID,
-		jar,
-		clientID,
-		globalOptions,
+		userID: userID,
+		i_userID: i_userID,
+		jar: jar,
+		clientID: clientID,
+		globalOptions: globalOptions,
 		loggedIn: true,
-		access_token: token,
+		access_token: 'NONE',
 		clientMutationId: 0,
 		mqttClient: undefined,
 		lastSeqId: irisSeqID,
