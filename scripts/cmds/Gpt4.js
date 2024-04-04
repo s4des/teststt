@@ -12,8 +12,8 @@ module.exports = {
 
   langs: {
         en: {
-            balance: "GPT-4",
-            loading: "GPT-4\n━━━━━━━━━━━━━━━\n⏳Please wait...\n━━━━━━━━━━━━━━━"
+            balance: "🤖|𝙲𝚑𝚊𝚝𝙶𝙿𝚃-4|",
+            loading: "🤖|𝙲𝚑𝚊𝚝𝙶𝙿𝚃-4|\n━━━━━━━━━━━━━━━\n⏳ | 𝑃𝑙𝑒𝑎𝑠𝑒 𝑤𝑎𝑖𝑡....\n━━━━━━━━━━━━━━━"
         }
   },
 
