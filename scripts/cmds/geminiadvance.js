@@ -1,5 +1,5 @@
 const axios = require('axios');
-const apii = `https://gemini-api.replit.app`;
+const apii = `https://deku-rest-api.onrender.com`;
 module.exports = {
   config: {
     name: 'geminiadvance',
