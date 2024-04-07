@@ -1,63 +1,79 @@
 const axios = require('axios');
 
-async function fetchFromAI(url, params) {
-  try {
-    const response = await axios.get(url, { params });
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
-
-async function getAIResponse(input, userId, messageID) {
-  const services = [
-    { url: 'https://ai-tools.replit.app/gpt', params: { prompt: input, uid: userId } },
-    { url: 'https://openaikey-x20f.onrender.com/api', params: { prompt: input } },
-    { url: 'http://fi3.bot-hosting.net:20265/api/gpt', params: { question: input } },
-    { url: 'https://ai-chat-gpt-4-lite.onrender.com/api/hercai', params: { question: input } }
-  ];
-
-  let response = "Error: No response from AI services.";
-  let currentIndex = 0;
-
-  for (let i = 0; i < services.length; i++) {
-    const service = services[currentIndex];
-    const data = await fetchFromAI(service.url, service.params);
-    if (data && (data.gpt4 || data.reply || data.response)) {
-      response = data.gpt4 || data.reply || data.response;
-      break;
-    }
-    currentIndex = (currentIndex + 1) % services.length; // Move to the next service in the cycle
-  }
-
-  return { response, messageID };
-}
+const Prefixes = [
+  'gpt',
+  'ai',
+  'what',
+];
 
 module.exports = {
-  config: {
-    name: 'ai',
-    author: 'Charlie',
-    role: 0,
-    category: 'ai',
-    shortDescription: 'ai to ask anything',
-  },
-  onStart: async function ({ api, event, args }) {
-    const input = args.join(' ').trim();
-    if (!input) {
-      api.sendMessage(`🧋✨ | 𝙼𝚘𝚌𝚑𝚊 𝙰𝚒\n━━━━━━━━━━━━━━━━\nPlease provide a question or statement.\n━━━━━━━━━━━━━━━━`, event.threadID, event.messageID);
-      return;
-    }
+  config: {
+    name: 'hercai',
+    version: '2.5.4',
+    author: 'sharleyy',//credits owner of this api
+    role: 0,
+    category: 'ai',
+    shortDescription: {
+      en: 'Asks an AI for an answer.',
+    },
+    longDescription: {
+      en: 'Asks an AI for an answer based on the user prompt.',
+    },
+    guide: {
+      en: '{pn} [prompt]',
+    },
+  },
 
-    const { response, messageID } = await getAIResponse(input, event.senderID, event.messageID);
-    api.sendMessage(`🧋✨ | 𝙼𝚘𝚌𝚑𝚊 𝙰𝚒\n━━━━━━━━━━━━━━━━\n${response}\n━━━━━━━━━━━━━━━━`, event.threadID, messageID);
-  },
-  onChat: async function ({ event, message }) {
-    const messageContent = event.body.trim().toLowerCase();
-    if (messageContent.startsWith("ai")) {
-      const input = messageContent.replace(/^ai\s*/, "").trim();
-      const { response, messageID } = await getAIResponse(input, event.senderID, message.messageID);
-      message.reply(`🧋✨ | 𝙼𝚘𝚌𝚑𝚊 𝙰𝚒\n━━━━━━━━━━━━━━━━\n${response}\n━━━━━━━━━━━━━━━━`, messageID);
+  langs: {
+    en: {
+      final: "🤖|Test|",
+      loading: "🤖|Test|\n━━━━━━━━━━━━━━━\n⏳ | 𝑃𝑙𝑒𝑎𝑠𝑒 wait..."
     }
-  }
+  },
+
+  onStart: async function () {},
+
+  onChat: async function ({ api, event, args, getLang, message }) {
+    try {
+      const prefix = Prefixes.find((p) => event.body && event.body.toLowerCase().startsWith(p));
+
+      if (!prefix) {
+        return;
+      }
+
+      const prompt = event.body.substring(prefix.length).trim();
+
+      if (prompt === '') {
+
+        await message.reply(
+          "Kindly provide the question at your convenience and I shall strive to deliver an effective response. Your satisfaction is my top priority."
+        );
+        
+        return;
+      }
+
+
+      const loadingMessage = getLang("loading");
+      const loadingReply = await message.reply(loadingMessage);
+      const url = "https://hercai.onrender.com/v3/hercai"; // Replace with the new API endpoint
+      const response = await axios.get(`${url}?question=${encodeURIComponent(prompt)}`);
+
+      if (response.status !== 200 || !response.data) {
+        throw new Error('Invalid or missing response from API');
+      }
+
+      const messageText = response.data.reply.trim(); // Adjust according to the response structure of the new API
+      const userName = getLang("final");
+      const finalMsg = `${userName}\n━━━━━━━━━━━━━━━\n${messageText}\n━━━━━━━━━━━━━━━\n`;
+      api.editMessage(finalMsg, loadingReply.messageID);
+
+      console.log('Sent answer as a reply to user');
+    } catch (error) {
+      console.error(`Failed to get answer: ${error.message}`);
+      api.sendMessage(
+        `${error.message}.\n\nYou can try typing your question again or resending it, as there might be a bug from the server that's causing the problem. It might resolve the issue.`,
+        event.threadID
+      );
+    }
+  },
 };
