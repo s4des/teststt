@@ -26,8 +26,8 @@ module.exports = {
 
   langs: {
     en: {
-      final: "🤖|Test|",
-      loading: "🤖|Test|\n━━━━━━━━━━━━━━━\n⏳ | 𝑃𝑙𝑒𝑎𝑠𝑒 wait..."
+      final: "🤖 |𝙲𝚑𝚊𝚝𝙶𝙿𝚃|",
+      loading: "🤖 |𝙲𝚑𝚊𝚝𝙶𝙿𝚃|\n━━━━━━━━━━━━━━━\n⏳ | 𝘗𝘭𝘦𝘢𝘴𝘦 𝘸𝘢𝘪𝘵.....\n━━━━━━━━━━━━━━━\n"
     }
   },
 
@@ -51,7 +51,6 @@ module.exports = {
         
         return;
       }
-
 
       const loadingMessage = getLang("loading");
       const loadingReply = await message.reply(loadingMessage);
