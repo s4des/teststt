@@ -9,7 +9,7 @@ const Prefixes = [
 
 module.exports = {
   config: {
-    name: 'hercai',
+    name: 'ai',
     version: '2.5.4',
     author: 'sharleyy',//credits owner of this api
     role: 0,
