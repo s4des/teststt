@@ -25,6 +25,8 @@ module.exports = {
   },
   onStart: async function ({ api, event }) {
     try {
+          const loadingMessage = getLang("loading");
+              const loadingReply = await message.reply(loadingMessage);
       const response = await axios.get("https://api.popcat.xyz/pickuplines");
       const { pickupline } = response.data;
        const finalMsg =  `💘 ${pickupline}`;
