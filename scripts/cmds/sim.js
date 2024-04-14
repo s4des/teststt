@@ -26,7 +26,7 @@ module.exports = {
         },
     },
 
-    onStart: async function ({ args, message, event, getLang, api }) {
+    onStart: async function ({ args, message, event, getLang, api, threadsData }) {
         try {
             const loadingMessage = getLang("loading");
             const loadingReply = await message.reply(loadingMessage);
