@@ -31,7 +31,7 @@ module.exports = {
 
 
       const { pickupline } = response.data;
-      const finalMsg = `💘 ${pickupline}`;
+      const finalMsg = `━━━━━━━━━━━━━━━\n🤍 | ${pickupline}\n`;
       // You need to define finalMsg and loadingReply.messageID somewhere in your code
       return api.editMessage(finalMsg, loadingReply.messageID);
     } catch (error) {
