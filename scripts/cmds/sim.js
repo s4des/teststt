@@ -30,8 +30,6 @@ module.exports = {
         if (args[0]) {
             const yourMessage = args.join(" ");
             try {
-                const loadingMessage = getLang("loading");
-                const loadingReply = await message.reply(loadingMessage);
 
                 const responseMessage = await getMessage(yourMessage);
                 await api.editMessage(loadingReply.messageID, `${responseMessage}`);
@@ -49,9 +47,11 @@ module.exports = {
         }
         if (args.length > 1) {
             try {
+                const loadingMessage = getLang("loading");
+      const loadingReply = await message.reply(loadingMessage);
                 const langCode = await threadsData.get(event.threadID, "settings.lang") || global.GoatBot.config.language;
                 const responseMessage = await getMessage(args.join(" "), langCode);
-                return message.reply(`${responseMessage}`);
+                await api.editMessage(loadingReply.messageID, `${responseMessage}`);
             }
             catch (err) {
                 return message.reply(getLang("error"));
