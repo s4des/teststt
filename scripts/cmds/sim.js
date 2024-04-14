@@ -10,7 +10,7 @@ module.exports = {
 		longDescription: {
 			en: 'Chat with simsimi'
 		},
-		category: 'sim',
+		category: 'groups',
 		guide: {
 			en: '   {pn} <word>: chat with simsimi'
 				+ '\n   Example:{pn} hi'
@@ -20,22 +20,16 @@ module.exports = {
 	langs: {
 		en: {
 			chatting: 'Already Chatting with sim...',
-			error: 'Server Down Please Be Patient',
-            loading: "🤖 | 𝙲𝚑𝚊𝚝𝙶𝙿𝚃 |\n━━━━━━━━━━━━━━━\n⏳ | 𝙋𝙡𝙚𝙖𝙨𝙚 𝙬𝙖𝙞𝙩......\n━━━━━━━━━━━━━━━\n",
-           final: "🤖 | 𝙲𝚑𝚊𝚝𝙶𝙿𝚃 |",
+			error: 'Server Down Please Be Patient'
 		}
 	},
 
 	onStart: async function ({ args, message, event, getLang }) {
 		if (args[0]) {
 			const yourMessage = args.join(" ");
-            const messageText = response.data.reply.trim(); // Adjust according to the response structure of the new API
-      const userName = getLang("final");
 			try {
 				const responseMessage = await getMessage(yourMessage);
-				const finalMsg = `━━━━━━━━━━━━━━━\n${responseMessage}\n━━━━━━━━━━━━━━━`;
-                api.editMessage(finalMsg, loadingReply.messageID);
-
+				return message.reply(`━━━━━━━━━━━━━━━\n${responseMessage}\n━━━━━━━━━━━━━━━`);
 			}
 			catch (err) {
 				console.log(err)
@@ -63,8 +57,6 @@ module.exports = {
 
 async function getMessage(yourMessage, langCode) {
 	try {
-        const loadingMessage = getLang("loading");
-      const loadingReply = await message.reply(loadingMessage);
 		const res = await axios.get(`https://simsimi.fun/api/v2/?mode=talk&lang=ph&message=${yourMessage}&filter=false`);
 		if (!res.data.success) {
 			throw new Error('API returned a non-successful message');
