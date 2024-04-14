@@ -29,12 +29,12 @@ module.exports = {
 	},
 
 	onStart: async function ({ args, message, event, getLang }) {
-        const loadingMessage = getLang("loading");
-        const loadingReply = await message.reply(loadingMessage);
-
 		if (args[0]) {
 			const yourMessage = args.join(" ");
 			try {
+                const loadingMessage = getLang("loading");
+        const loadingReply = await message.reply(loadingMessage);
+
 				const responseMessage = await getMessage(yourMessage);
 				return api.editMessage(`━━━━━━━━━━━━━━━\n${responseMessage}\n━━━━━━━━━━━━━━━`, loadingReply.messageID);
 			}
