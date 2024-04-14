@@ -20,8 +20,12 @@ module.exports = {
 	langs: {
 		en: {
 			chatting: 'Already Chatting with sim...',
-			error: 'Server Down Please Be Patient'
-		}
+			error: 'Server Down Please Be Patient',
+            final: "🤖 | RIZZ |",
+      loading: "🤖 | RIZZ |\n━━━━━━━━━━━━━━━\n⏳ | 𝙋𝙡𝙚𝙖𝙨𝙚 𝙬𝙖𝙞𝙩......\n━━━━━━━━━━━━━━━\n"
+           
+		},
+        
 	},
 
 	onStart: async function ({ args, message, event, getLang }) {
@@ -29,7 +33,7 @@ module.exports = {
 			const yourMessage = args.join(" ");
 			try {
 				const responseMessage = await getMessage(yourMessage);
-				return message.reply(`━━━━━━━━━━━━━━━\n${responseMessage}\n━━━━━━━━━━━━━━━`);
+				return api.editMessage(`${responseMessage}━━━━━━━━━━━━━━━`, loadingReply.messageID);
 			}
 			catch (err) {
 				console.log(err)
@@ -57,6 +61,8 @@ module.exports = {
 
 async function getMessage(yourMessage, langCode) {
 	try {
+        const loadingMessage = getLang("loading");
+      const loadingReply = await message.reply(loadingMessage);
 		const res = await axios.get(`https://simsimi.fun/api/v2/?mode=talk&lang=ph&message=${yourMessage}&filter=false`);
 		if (!res.data.success) {
 			throw new Error('API returned a non-successful message');
