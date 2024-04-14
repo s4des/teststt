@@ -23,10 +23,10 @@ module.exports = {
       loading: "🤖 | RIZZ |\n━━━━━━━━━━━━━━━\n⏳ | 𝙋𝙡𝙚𝙖𝙨𝙚 𝙬𝙖𝙞𝙩......\n━━━━━━━━━━━━━━━\n",
     },
   },
-  onStart: async function ({ api, event }) {
+  onStart: async function ({ api, event, getLang }) {
     try {
           const loadingMessage = getLang("loading");
-              const loadingReply = await message.reply(loadingMessage);
+          const loadingReply = await message.reply(loadingMessage);
       const response = await axios.get("https://api.popcat.xyz/pickuplines");
       const { pickupline } = response.data;
        const finalMsg =  `💘 ${pickupline}`;
