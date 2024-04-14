@@ -27,48 +27,39 @@ module.exports = {
     },
 
     onStart: async function ({ args, message, event, getLang, api }) {
-        if (args[0]) {
+        try {
+            const loadingMessage = getLang("loading");
+            const loadingReply = await message.reply(loadingMessage);
+            const langCode = await threadsData.get(event.threadID, "settings.lang") || global.GoatBot.config.language;
             const yourMessage = args.join(" ");
-            try {
-
-                const responseMessage = await getMessage(yourMessage);
-                await api.editMessage(loadingReply.messageID, `${responseMessage}`);
+            const res = await axios.get(`https://simsimi.fun/api/v2/?mode=talk&lang=${langCode}&message=${yourMessage}&filter=false`);
+            if (!res.data.success) {
+                throw new Error('API returned a non-successful message');
             }
-            catch (err) {
-                console.log(err)
-                return message.reply(getLang("error"));
-            }
+            await api.editMessage(loadingReply.messageID, `${res.data.success}`);
+        } catch (err) {
+            console.error('Error while getting a message:', err);
+            throw err;
         }
     },
 
-    onChat: async function ({ args, message, threadsData, event, isUserCallCommand, getLang }) {
-        if (!isUserCallCommand) {
+    onChat: async function ({ args, message, threadsData, event, isUserCallCommand, getLang, api }) {
+        if (!isUserCallCommand || args.length < 1) {
             return;
         }
-        if (args.length > 1) {
-            try {
-                const loadingMessage = getLang("loading");
-      const loadingReply = await message.reply(loadingMessage);
-                const langCode = await threadsData.get(event.threadID, "settings.lang") || global.GoatBot.config.language;
-                const responseMessage = await getMessage(args.join(" "), langCode);
-                await api.editMessage(loadingReply.messageID, `${responseMessage}`);
+        try {
+            const loadingMessage = getLang("loading");
+            const loadingReply = await message.reply(loadingMessage);
+            const langCode = await threadsData.get(event.threadID, "settings.lang") || global.GoatBot.config.language;
+            const yourMessage = args.join(" ");
+            const res = await axios.get(`https://simsimi.fun/api/v2/?mode=talk&lang=${langCode}&message=${yourMessage}&filter=false`);
+            if (!res.data.success) {
+                throw new Error('API returned a non-successful message');
             }
-            catch (err) {
-                return message.reply(getLang("error"));
-            }
+            await api.editMessage(loadingReply.messageID, `${res.data.success}`);
+        } catch (err) {
+            console.error('Error while getting a message:', err);
+            throw err;
         }
     }
 };
-
-async function getMessage(yourMessage, langCode) {
-    try {
-        const res = await axios.get(`https://simsimi.fun/api/v2/?mode=talk&lang=${langCode}&message=${yourMessage}&filter=false`);
-        if (!res.data.success) {
-            throw new Error('API returned a non-successful message');
-        }
-        return res.data.success;
-    } catch (err) {
-        console.error('Error while getting a message:', err);
-        throw err;
-    }
-}
