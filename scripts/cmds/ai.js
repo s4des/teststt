@@ -65,7 +65,7 @@ module.exports = {
       const messageText = response.data.reply.trim(); // Adjust according to the response structure of the new API
       const userName = getLang("final");
       const finalMsg = `${userName}\n━━━━━━━━━━━━━━━\n${messageText}\n━━━━━━━━━━━━━━━\n`;
-      api.editMessage(finalMsg, loadingReply.messageID);
+     api.editMessage(finalMsg, loadingReply.messageID); 
 
       console.log('Sent answer as a reply to user');
     } catch (error) {
