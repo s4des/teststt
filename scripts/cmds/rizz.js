@@ -27,7 +27,7 @@ module.exports = {
     try {
       const response = await axios.get("https://api.popcat.xyz/pickuplines");
       const { pickupline } = response.data;
-      const message = `💘 ${pickupline}`;
+       const finalMsg =  `💘 ${pickupline}`;
       // You need to define finalMsg and loadingReply.messageID somewhere in your code
       return api.editMessage(finalMsg, loadingReply.messageID);
     } catch (error) {
