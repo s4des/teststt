@@ -60,9 +60,6 @@ module.exports = {
     },
 
     onStart: async ({ api, event, getLang, message }) => {
-      const loadingMessage = getLang("loading");
-      const loadingReply = await message.reply(loadingMessage);
-        const startTime = await module.exports.getStartTimestamp();
         const uptimeSeconds = Math.floor((Date.now() - startTime) / 1000);
 
         const usage = await pidusage(process.pid);
@@ -71,7 +68,9 @@ module.exports = {
             platform: os.platform(),
             architecture: os.arch()
         };
-
+        const loadingMessage = getLang("loading");
+        const loadingReply = await message.reply(loadingMessage);
+          const startTime = await module.exports.getStartTimestamp();
         const timeStart = Date.now();
         const uptimeMessage = module.exports.getUptime(uptimeSeconds);
       const userName = getLang("final");
