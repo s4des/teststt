@@ -18,10 +18,10 @@ module.exports = {
             en: '{p}uptime'
         },
         langs: {
-            en: {
-                final: "🤖 | 𝙲𝚑𝚊𝚝𝙶𝙿𝚃 |",
-                loading: "🤖 | 𝙲𝚑𝚊𝚝𝙶𝙿𝚃 |\n━━━━━━━━━━━━━━━\n⏳ | 𝙋𝙡𝙚𝙖𝙨𝙚 𝙬𝙖𝙞𝙩......\n━━━━━━━━━━━━━━━\n"
-            }
+          en: {
+            final: "🤖 | CHECKING STATUS |",
+            loading: "🤖 | CHECKING STATUS |\n━━━━━━━━━━━━━━━\n⏳ | 𝙋𝙡𝙚𝙖𝙨𝙚 𝙬𝙖𝙞𝙩......\n━━━━━━━━━━━━━━━\n",
+          },
         }
     },
 
