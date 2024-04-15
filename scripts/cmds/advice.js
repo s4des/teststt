@@ -27,10 +27,9 @@ module.exports = {
 
   onStart: async function ({ api, event, args, message, getLang }) {
     try {
+      const adviceResult = await srod.GetAdvice();
       const loadingMessage = getLang("loading");
       const loadingReply = await message.reply(loadingMessage);
-
-      const adviceResult = await srod.GetAdvice();
       const advice = adviceResult.embed.description;
 
       const translatedAdvice = await translateAdvice(advice, message);
