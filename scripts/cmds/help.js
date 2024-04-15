@@ -128,7 +128,7 @@ module.exports = {
 
 																const returnArray = allPage[page - 1] || [];
 																const startNumber = (page - 1) * numberOfOnePage + 1;
-																msg += (returnArray || []).reduce((text, item, index) => text += `━━━━━━━━━━━━\n╭┈ ❒ 「 ${index + startNumber}${index + startNumber < 10 ? " " : ""} 」➪ ${item.data} \n╰┈➤ Description: ${value.config.shortDescription}\n━━━━━━━━━━━━\n\n`, '\n').slice(0, -1);
+																msg += (returnArray || []).reduce((text, item, index) => text += `━━━━━━━━━━━━\n╭┈ ❒ 「 ${index + startNumber}${index + startNumber < 10 ? " " : ""} 」➪ ${item.data} \n╰┈➤ Description: COMING SOON\n━━━━━━━━━━━━\n\n`, '\n').slice(0, -1);
 																await message.reply(getLang("help", msg, page, totalPage, commands.size, prefix, doNotDelete));
 												}
 												else if (sortHelp == "category") {

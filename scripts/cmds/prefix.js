@@ -31,7 +31,8 @@ module.exports = {
       confirmThisThread: "Please react to this message to confirm change prefix in your box chat",
       successGlobal: "Changed prefix of system bot to: %1",
       successThisThread: "Changed prefix in your box chat to: %1",
-      myPrefix: "╭┈ ❒ [ %2 ] : 𝙋𝙍𝙀𝙁𝙄𝙓\n╰┈➤ 𝖴𝗌𝖾 -𝘩𝘦𝘭𝘱 𝗍𝗈 𝗏𝗂𝖾𝗐 𝖺𝗅𝗅 𝖼𝗈𝗆𝗆𝖺𝗇𝖽𝗌.\n╰┈➤ 𝖴𝗌𝖾 -𝘩𝘦𝘭𝘱 (𝖼𝗈𝗆𝗆𝖺𝗇𝖽 𝗇𝖺𝗆𝗌) 𝗍𝗈 𝗏𝗂𝖾𝗐 𝗍𝗁𝖾𝗂𝗋 𝖽𝖾𝗌𝖼𝗋𝗂𝗉𝗍𝗂𝗈𝗇."
+      myPrefix: "╭┈ ❒ [ %2 ] : 𝙋𝙍𝙀𝙁𝙄𝙓\n╰┈➤ 𝖴𝗌𝖾 -𝘩𝘦𝘭𝘱 𝗍𝗈 𝗏𝗂𝖾𝗐 𝖺𝗅𝗅 𝖼𝗈𝗆𝗆𝖺𝗇𝖽𝗌.\n╰┈➤ 𝖴𝗌𝖾 -𝘩𝘦𝘭𝘱 (𝖼𝗈𝗆𝗆𝖺𝗇𝖽 𝗇𝖺𝗆𝗌) 𝗍𝗈 𝗏𝗂𝖾𝗐 𝗍𝗁𝖾𝗂𝗋 𝖽𝖾𝗌𝖼𝗋𝗂𝗉𝗍𝗂𝗈𝗇.",
+          loading: "🤖 | RIZZ |\n━━━━━━━━━━━━━━━\n⏳ | 𝙋𝙡𝙚𝙖𝙨𝙚 𝙬𝙖𝙞𝙩......\n━━━━━━━━━━━━━━━\n",
     }
   },
 
@@ -81,9 +82,11 @@ module.exports = {
   },
 
   onChat: async function ({ event, message, getLang }) {
+    const loadingMessage = getLang("loading");
+    const loadingReply = await message.reply(loadingMessage);
     if (event.body && (event.body.toLowerCase() === "prefix" || event.body.toLowerCase() === "🧋"))
       return () => {
-        return message.reply(getLang("myPrefix", global.GoatBot.config.prefix, utils.getPrefix(event.threadID)));
+        return api.editMessage(getLang("myPrefix", global.GoatBot.config.prefix, utils.getPrefix(loadingReply.messageID)));
       };
   }
 };

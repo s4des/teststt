@@ -16,8 +16,7 @@ module.exports = {
     guide: {
       en: '{prefix} <>',
     },
-
-    langs: {
+langs: {
       en: {
         loadings: "🤖 | TRANSLATING |\n━━━━━━━━━━━━━━━\n⏳ | 𝙋𝙡𝙚𝙖𝙨𝙚 𝙬𝙖𝙞𝙩......\n━━━━━━━━━━━━━━━\n"
       },
