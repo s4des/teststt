@@ -20,7 +20,7 @@ module.exports = {
     langs: {
       en: {
         final: "🤖 | TRANSLATING |",
-        loading: "🤖 | TRANSLATING |\n━━━━━━━━━━━━━━━\n⏳ | 𝙋𝙡𝙚𝙖𝙨𝙚 𝙬𝙖𝙞𝙩......\n━━━━━━━━━━━━━━━\n"
+        loadings: "🤖 | TRANSLATING |\n━━━━━━━━━━━━━━━\n⏳ | 𝙋𝙡𝙚𝙖𝙨𝙚 𝙬𝙖𝙞𝙩......\n━━━━━━━━━━━━━━━\n"
       },
     },
   },
@@ -28,7 +28,7 @@ module.exports = {
   onStart: async function ({ api, event, args, message, getLang }) {
     try {
       const adviceResult = await srod.GetAdvice();
-      const loadingMessage = getLang("loading");
+      const loadingMessage = getLang("loadings");
       const loadingReply = await message.reply(loadingMessage);
       const advice = adviceResult.embed.description;
 
