@@ -16,7 +16,7 @@ module.exports = {
     guide: {
       en: '{prefix} <>',
     },
-langs: {
+    lang: {
       en: {
         loadings: "🤖 | TRANSLATING |\n━━━━━━━━━━━━━━━\n⏳ | 𝙋𝙡𝙚𝙖𝙨𝙚 𝙬𝙖𝙞𝙩......\n━━━━━━━━━━━━━━━\n"
       },
@@ -26,14 +26,14 @@ langs: {
   onStart: async function ({ api, event, args, message, getLang }) {
     try {
       const adviceResult = await srod.GetAdvice();
-      const loadingMessage = getLang("loadings"); // Ensure getLang is retrieving the correct language string
-      const loadingReply = await message.reply(loadingMessage);
       const advice = adviceResult.embed.description;
-  
+      
       const translatedAdvice = await translateAdvice(advice, message);
-  
+      const loadingMessage = getLang("loadings");
+      const loadingReply = await message.reply(loadingMessage);
+      
       const finalMsg = `𝙎𝙤𝙥𝙝𝙞𝙖 𝘼𝙄:  ${translatedAdvice}`;
-  
+      
       await api.editMessage(finalMsg, loadingReply.messageID);
     } catch (error) {
       console.error(error);
