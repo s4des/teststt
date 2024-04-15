@@ -33,9 +33,9 @@ module.exports = {
 
       let translatedAdvice = await translateAdvice(advice);
 
-      let messageToSend = `𝙎𝙤𝙥𝙝𝙞𝙖 𝘼𝙄:  ${translatedAdvice}`;
+      let finalMsg = `𝙎𝙤𝙥𝙝𝙞𝙖 𝘼𝙄:  ${translatedAdvice}`;
 
-      return api.editMessage(messageToSend, loadingReply.messageID);
+      return api.editMessage(finalMsg, loadingReply.messageID);
     } catch (error) {
       console.error(error);
     }

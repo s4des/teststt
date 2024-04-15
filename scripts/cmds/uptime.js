@@ -60,9 +60,10 @@ module.exports = {
     },
 
     onStart: async ({ api, event, getLang, message }) => {
-        const uptimeSeconds = Math.floor((Date.now() - startTime) / 1000);
-        const loadingMessage = getLang("loading");
+      const loadingMessage = getLang("loading");
         const loadingReply = await message.reply(loadingMessage);
+        const uptimeSeconds = Math.floor((Date.now() - startTime) / 1000);
+        
 
         const usage = await pidusage(process.pid);
 
@@ -75,9 +76,9 @@ module.exports = {
         const timeStart = Date.now();
         const uptimeMessage = module.exports.getUptime(uptimeSeconds);
       const userName = getLang("final");
-        const returnResult = `BOT has been working for ${uptimeMessage}\n\n❖ Cpu usage: ${usage.cpu.toFixed(1)}%\n❖ RAM usage: ${module.exports.byte2mb(usage.memory)}\n❖ Cores: ${os.cpus().length}\n❖ Ping: ${Date.now() - timeStart}ms\n❖ Operating System Platform: ${osInfo.platform}\n❖ System CPU Architecture: ${osInfo.architecture}`;
+        const finalMsg = `BOT has been working for ${uptimeMessage}\n\n❖ Cpu usage: ${usage.cpu.toFixed(1)}%\n❖ RAM usage: ${module.exports.byte2mb(usage.memory)}\n❖ Cores: ${os.cpus().length}\n❖ Ping: ${Date.now() - timeStart}ms\n❖ Operating System Platform: ${osInfo.platform}\n❖ System CPU Architecture: ${osInfo.architecture}`;
 
         await module.exports.saveStartTimestamp(startTime); // Save the start time again to ensure it's updated
-        return api.editMessage(returnResult, loadingReply.messageID);
+        return api.editMessage(finalMsg, loadingReply.messageID);
     }
 };
