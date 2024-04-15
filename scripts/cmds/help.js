@@ -1,348 +1,280 @@
-const commandInfoMap = {
-  ai: {
-    name: "ai",
-    description: "Ai Based on GPT-4",
-    guide: "-ai what is life?"
-  },
-adduser: {
-    name: "adduser",
-    description: "add users to group chat using their uid or profile link",
-    guide: "-adduser <uid>\n-adduser <profile link>"
-  },
-join: {
-    name: "join",
-    description: "check all group chats where the bot is active and join specific group chats by replying base on number list",
-    guide: "-join\nreply with numbers to the list to join specific gc."
-  },
-  video: {
-    name: "video",
-    description: "searches and sends youtube video (mostly use between 1-7mins)",
-    guide: "-video <video title>"
-  },
-  bard: {
-    name: "bard",
-    description: "Google Bard",
-    guide: "-bard what is life"
-  },
-ban: {
-    name: "ban",
-    description: "Ban's members from using the bot",
-    guide: "-ban <uid>"
-  },
-kick: {
-    name: "kick",
-    description: "kick's members out of gc",
-    guide: "-kick <uid>\n-kick <@name>"
-  },
-restart: {
-    name: "restart",
-    description: "restart the bot",
-    guide: "-restart"
-  },
-setname: {
-    name: "setname",
-    description: "change nickname of existing groupchat members",
-    guide: "-setname <your own nickname>\n-setname <@tag> <nickname>\n-setname <uid> <nickname>"
-  },
-  tempmail: {
-    name: "tempmail",
-    description: "Get Temporary Emails and it's Inbox messages",
-    guide: "-tempmail create\n-tempmail inbox <email>"
-  },
-  claire: {
-    name: "claire",
-    description: "an ai based on gpt-4",
-    guide: "-claire what is life"
-  },
-  gpt: {
-    name: "gpt",
-    description: "ChatGPT 3.5",
-    guide: "-gpt what is life?"
-  },
-  gemini: {
-    name: "gemini",
-    description: "Google Gemini LLM",
-    guide: "-gemini what is life?"
-  },
-  translate: {
-    name: "translate",
-    description: "Translate to any languages",
-    guide: "Reply to text you want to translate and type -translate <language>"
-  },
-  insight: {
-    name: "insight",
-    description: "A poetic ai persona who shares enlightenment through poems and poetry.",
-    guide: "-insight give me advice"
-  },
-  tia: {
-    name: "tia",
-    description: "a girl you can talk with when bored",
-    guide: "-tia do you have a boyfriend?"
-  },
-  dalle: {
-    name: "dalle",
-    description: "make image through text",
-    guide: "-dalle cat"
-  },
-  image: {
-    name: "image",
-    description: "Search HD images online",
-    guide: "-image cat"
-  },
-  gmage: {
-    name: "gmage",
-    description: "Search Google Images online",
-    guide: "-gmage cat"
-  },
-  gptdraw: {
-    name: "gpt draw",
-    description: "Draw texts",
-    guide: "-gpt draw cat"
-  },
-  pinterest: {
-    name: "pinterest",
-    description: "Searches Images in Pinterest ",
-    guide: "-pinterest cat -10"
-  },
-  pinterest2: {
-    name: "pinterest2",
-    description: "Searches Images in Pinterest",
-    guide: "-pinterest2 cat -10"
-  },
-  prodia: {
-    name: "prodia",
-    description: "make images through texts",
-    guide: "-prodia cat"
-  },
-  remini: {
-    name: "remini",
-    description: "enhances your image to lessen the blur",
-    guide: "reply to image and type -remini"
-  },
-  chords: {
-    name: "chords",
-    description: "Searches lyrics with chords",
-    guide: "-chords all of me"
-  },
-  lyrics: {
-    name: "lyrics",
-    description: "Fetches lyrics of a song",
-    guide: "-lyrics perfect by ed sheeran"
-  },
- song: {
-    name: "song",
-    description: "plays a song",
-    guide: "-song perfect by ed sheeran"
-  },
-  spotify: {
-    name: "spotify",
-    description: "fetches song from spotify",
-    guide: "-spotify perfect by ed sheeran"
-  },
-  alldl: {
-    name: "alldl",
-    description: "downloads reels, shorts, insta, tiktok videos, and spotify song through link",
-    guide: "-alldl <link>"
-  },
-  clean: {
-    name: "clean",
-    description: "Cleans cache files of the bot",
-    guide: "-clean"
-  },
-  font: {
-    name: "font",
-    description: "changes your font text",
-    guide: "-font list\n-font <font name> <text>"
-  },
-  help: {
-    name: "help",
-    description: "View all commands",
-    guide: "-help\n-help <command name>"
-  },
-  prefix: {
-    name: "prefix",
-    description: "view some commands and shows bot's prefix",
-    guide: "prefix"
-  },
-  stat: {
-    name: "stat",
-    description: "See server stats where bot is running",
-    guide: "-stat"
-  },
-  uid: {
-    name: "uid",
-    description: "shows your facebook uid",
-    guide: "-uid"
-  },
-  unsend: {
-    name: "unsend",
-    description: "deletes bot messages",
-    guide: "reply to bot message and type -unsend"
-  },
-  uptime: {
-    name: "uptime",
-    description: "Shows how many hours the bot is running",
-    guide: "-uptime"
-  },
-    ngl: {
-    name: "ngl",
-    description: "Ngl spamming ☠️",
-    guide: "/ngl [username] [message] [amount]"
-  },
-    stalk: {
-    name: "stalk",
-    description: "Stalk user",
-    guide: "/stalk [uid]"
-  },
-    fbpost: {
-    name: "fbpost",
-    description: "Auto post",
-    guide: "secret"
-  },
-    hack: {
-    name: "hack",
-    description: "Hack user",
-    guide: "/hack [mention] [uid]"
-  },
-    thread: {
-    name: "thread",
-    description: "Shows the thread where the bot is active",
-    guide: "/thread"
-  },
-    file: {
-    name: "file",
-    description: "Show code file",
-    guide: "/file [cmd]"
-  },
-    obfuscate: {
-    name: "obfuscate",
-    description: "Obfuscate or encrypt js code",
-    guide: "/ob [code]"
-  },
-    helpall: {
-    name: "helpall",
-    description: "Show all command info",
-    guide: "/helpall"
-  },
-    pending: {
-    name: "pending",
-    description: "Shows all pending thread or message",
-    guide: "secret *//just for admin"
-  },
-};
+const fs = require("fs-extra");
+const axios = require("axios");
+const path = require("path");
+const { getPrefix } = global.utils;
+const { commands, aliases } = global.GoatBot;
+const doNotDelete = "⾕ |  ZACKI ";
+/** 
+* @author NTKhang
+* @author: do not delete it
+* @message if you delete or edit it you will get a global ban
+* please don't ban me, your help.js is Modified 
+*/
 
 module.exports = {
-  config: {
-    name: "help",
-    aliases: ["help"],
-    version: 1.0,
-    author: "LiANE",
-    shortDescription: { en: "View all commands" },
-    category: "members",
-  },
-  onStart: async function({ message, args }) {
-    if (args[0]) {
-      const command = args[0].toLowerCase();
-      if (commandInfoMap[command]) {
-        const { name, description, guide } = commandInfoMap[command];
-        const response = `━━━━━━━━━━━━━━━━\n𝙲𝚘𝚖𝚖𝚊𝚗𝚍 𝙽𝚊𝚖𝚎: ${name}\n𝙳𝚎𝚜𝚌𝚛𝚒𝚙𝚝𝚒𝚘𝚗: ${description}\n𝙶𝚞𝚒𝚍𝚎: ${guide}\n━━━━━━━━━━━━━━━━`;
-        return message.reply(response);
-      } else {
-        return message.reply("Command not found.");
-      }
-    } else {
-      const commandsList = `━━━━━━━━━━━━━━━━
-𝙰𝚟𝚊𝚒𝚕𝚊𝚋𝚕𝚎 𝙲𝚘𝚖𝚖𝚊𝚗𝚍𝚜:
-╭─╼━━━━━━━━╾─╮
-│  📖 | 𝙴𝚍𝚞𝚌𝚊𝚝𝚒𝚘𝚗
-│ - AI
-│ - Box
-│ - Bard
-│ - Claire
-│ - Gpt
-│ - Gemini
-│ - Translate 
-│ - Dictionary 
-╰─━━━━━━━━━╾─╯
-╭─╼━━━━━━━━╾─╮
-│  🗨 | 𝙰𝚒 - 𝙲𝚑𝚊𝚝
-│ - Insight  
-│ - Tia
-│ - sim
-╰─━━━━━━━━━╾─╯
-╭─╼━━━━━━━━╾─╮
-│  🖼 | 𝙸𝚖𝚊𝚐𝚎
-│ - Dalle
-│ - Image
-│ - Gmage
-│ - Pinterest
-│ - Pinterest2
-│ - Prodia
-│ - Remini
-│ - Pornhub
-│ - Gay
-│ - Rip
-╰─━━━━━━━━━╾─╯
-╭─╼━━━━━━━━╾─╮
-│  🗨 | BOLD
-│ - fingering  
-╰─━━━━━━━━━╾─╯
-╭─╼━━━━━━━━╾─╮
-│  🎧 | 𝙼𝚞𝚜𝚒𝚌
-│ - Chords 
-│ - Lyrics
-│ - Song
-│ - Spotify
-│ - Video 
-╰─━━━━━━━━━╾─╯
-╭─╼━━━━━━━━╾─╮
-│  👥 | 𝙼𝚎𝚖𝚋𝚎𝚛𝚜
-│ - Alldl
-│ - Clean
-│ - Font
-│ - Help
-│ - Join
-│ - Prefix
-│ - Stat
-│ - Setname
-│ - Tempmail
-│ - Uid
-│ - Unsend
-│ - Uptime
-│ - Shoti
-│ - Weather
-│ - Info
-│ - Hack
-│ - Helpall
-│ - Stalk
-│ -advice
-╰─━━━━━━━━━╾─╯
-╭─╼━━━━━━━━╾─╮
-│  👑 | 𝙰𝚍𝚖𝚒𝚗 Bot
-│ - Adduser
-│ - Ban
-│ - Kick
-│ - Restart 
-│ - Leave
-│ - User
-│ - Thread
-│ - Ngl
-│ - Pending
-│ - File
-│ - Obfuscate
-│ - Fbpost
-│ - Antiout
-│ - Bio
-╰─━━━━━━━━━╾─╯
--𝚑𝚎𝚕𝚙 <𝚌𝚘𝚖𝚖𝚊𝚗𝚍 𝚗𝚊𝚖𝚎>
-𝚃𝚘 𝚜𝚎𝚎 𝙲𝚘𝚖𝚖𝚊𝚗𝚍 𝙸𝚗𝚏𝚘
+				config: {
+								name: "help",
+								version: "1.17",
+								author: "NTKhang", //Modified By Zedric
+								countDown: 5,
+								role: 0,
+								shortDescription: {
+												vi: "Xem cách dùng lệnh",
+												en: "View command usage"
+								},
+								longDescription: {
+												vi: "Xem cách sử dụng của các lệnh",
+												en: "View command usage"
+								},
+								category: "info",
+								guide: {
+												vi: "   {pn} [để trống | <số trang> | <tên lệnh>]"
+																+ "\n   {pn} <command name> [-u | usage | -g | guide]: chỉ hiển thị phần hướng dẫn sử dụng lệnh"
+																+ "\n   {pn} <command name> [-i | info]: chỉ hiển thị phần thông tin về lệnh"
+																+ "\n   {pn} <command name> [-r | role]: chỉ hiển thị phần quyền hạn của lệnh"
+																+ "\n   {pn} <command name> [-a | alias]: chỉ hiển thị phần tên viết tắt của lệnh",
+												en: "{pn} [empty | <page number> | <command name>]"
+																+ "\n   {pn} <command name> [-u | usage | -g | guide]: only show command usage"
+																+ "\n   {pn} <command name> [-i | info]: only show command info"
+																+ "\n   {pn} <command name> [-r | role]: only show command role"
+																+ "\n   {pn} <command name> [-a | alias]: only show command alias"
+								},
+								priority: 1
+				},
 
-Example: -help bard
+				langs: {
+								vi: {
+												help: "╭─────────────⭓\n%1\n├─────⭔\n│ Trang [ %2/%3 ]\n│ Hiện tại bot có %4 lệnh có thể sử dụng\n│ » Gõ %5help <số trang> để xem danh sách các lệnh\n│ » Gõ %5help để xem chi tiết cách sử dụng lệnh đó\n├────────⭔\n│ %6\n╰─────────────⭓",
+												help2: "%1├───────⭔\n│ » Hiện tại bot có %2 lệnh có thể sử dụng\n│ » Gõ %3help <tên lệnh> để xem chi tiết cách sử dụng lệnh đó\n│ %4\n╰─────────────⭓",
+												commandNotFound: "Lệnh \"%1\" không tồn tại",
+												getInfoCommand: "╭── NAME ────⭓\n│ %1\n├── INFO\n│ Mô tả: %2\n│ Các tên gọi khác: %3\n│ Các tên gọi khác trong nhóm bạn: %4\n│ Version: %5\n│ Role: %6\n│ Thời gian mỗi lần dùng lệnh: %7s\n│ Author: %8\n├── Usage\n│%9\n├── Notes\n│ Nội dung bên trong <XXXXX> là có thể thay đổi\n│ Nội dung bên trong [a|b|c] là a hoặc b hoặc c\n╰──────⭔",
+												onlyInfo: "╭── INFO ────⭓\n│ Tên lệnh: %1\n│ Mô tả: %2\n│ Các tên gọi khác: %3\n│ Các tên gọi khác trong nhóm bạn: %4\n│ Version: %5\n│ Role: %6\n│ Thời gian mỗi lần dùng lệnh: %7s\n│ Author: %8\n╰─────────────⭓",
+												onlyUsage: "╭── USAGE ────⭓\n│%1\n╰─────────────⭓",
+												onlyAlias: "╭── ALIAS ────⭓\n│ Các tên gọi khác: %1\n│ Các tên gọi khác trong nhóm bạn: %2\n╰─────────────⭓",
+												onlyRole: "╭── ROLE ────⭓\n│%1\n╰─────────────⭓",
+												doNotHave: "Không có",
+												roleText0: "0 (Tất cả người dùng)",
+												roleText1: "1 (Quản trị viên nhóm)",
+												roleText2: "2 (Admin bot)",
+												roleText0setRole: "0 (set role, tất cả người dùng)",
+												roleText1setRole: "1 (set role, quản trị viên nhóm)",
+												pageNotFound: "Trang %1 không tồn tại"
+								},
+								en: {
+												help: "🔴🟡🟢\n\n╔⏤⏤⏤╝❀╚⏤⏤⏤╗\n      %6\n\n%1\n\nPage [ %2/%3 ]\nCurrently, The Bot has %4 Commands \n\n 📜 » Type %5help <page> \n 📃 » Type %5help <command> \n\n \n",
+												help2: "%1├───────⭔\n│ » Currently, the bot has %2 commands that can be used\n│ » Type %3help <command name> to view the details of how to use that command\n│ %4\n╰─────────────⭓",
+												commandNotFound: "My Lord, Command \"%1\" does not exist, My Apologies 😓",
+												getInfoCommand: "╭── NAME ────⭓\n│ %1\n├── INFO\n│ Description: %2\n│ Other names: %3\n│ Other names in your group: %4\n│ Version: %5\n│ Role: %6\n│ Time per command: %7s\n│ Author: %8\n├── Usage\n%9\n├── Notes\n│ The content inside <XXXXX> can be changed\n│ The content inside [a|b|c] is a or b or c\n╰──────⭔",
+												onlyInfo: "╭── INFO ────⭓\n│ Command name: %1\n│ Description: %2\n│ Other names: %3\n│ Other names in your group: %4\n│ Version: %5\n│ Role: %6\n│ Time per command: %7s\n│ Author: %8\n╰─────────────⭓",
+												onlyUsage: "╭── USAGE ────⭓\n│%1\n╰─────────────⭓",
+												onlyAlias: "╭── ALIAS ────⭓\n│ Other names: %1\n│ Other names in your group: %2\n╰─────────────⭓",
+												onlyRole: "╭── ROLE ────⭓\n│%1\n╰─────────────⭓",
+												doNotHave: "Do not have",
+												roleText0: "0 (All users)",
+												roleText1: "1 (Group administrators)",
+												roleText2: "2 (Admin bot)",
+												roleText0setRole: "0 (set role, all users)",
+												roleText1setRole: "1 (set role, group administrators)",
+												pageNotFound: "Page %1 does not exist"
+								}
+				},
 
-𝗢𝘄𝗻𝗲𝗿:https://www.facebook.com/zachary.pnaveax
-━━━━━━━━━━━━━━━━`;
+				onStart: async function ({ message, args, event, threadsData, getLang, role }) {
+								const langCode = await threadsData.get(event.threadID, "data.lang") || global.GoatBot.config.language;
+								let customLang = {};
+								const pathCustomLang = path.normalize(`${process.cwd()}/languages/cmds/${langCode}.js`);
+								if (fs.existsSync(pathCustomLang))
+												customLang = require(pathCustomLang);
 
-      return message.reply(commandsList);
-    }
-  }
+								const { threadID } = event;
+								const threadData = await threadsData.get(threadID);
+								const prefix = getPrefix(threadID);
+								let sortHelp = threadData.settings.sortHelp || "name";
+								if (!["category", "name"].includes(sortHelp))
+												sortHelp = "name";
+								const commandName = (args[0] || "").toLowerCase();
+								const command = commands.get(commandName) || commands.get(aliases.get(commandName));
+
+								// ———————————————— LIST ALL COMMAND ——————————————— //
+								if (!command && !args[0] || !isNaN(args[0])) {
+												const arrayInfo = [];
+												let msg = "";
+												if (sortHelp == "name") {
+																const page = parseInt(args[0]) || 1;
+																const numberOfOnePage = 20;
+																for (const [name, value] of commands) {
+																				if (value.config.role > 1 && role < value.config.role)
+																								continue;
+																				let describe = name;
+																				let shortDescription;
+																				const shortDescriptionCustomLang = customLang[name]?.shortDescription;
+																				if (shortDescriptionCustomLang != undefined)
+																								shortDescription = checkLangObject(shortDescriptionCustomLang, langCode);
+																				else if (value.config.shortDescription)
+																								shortDescription = checkLangObject(value.config.shortDescription, langCode);
+																				if (shortDescription)
+																								describe += `: ${cropContent(shortDescription.charAt(0).toUpperCase() + shortDescription.slice(1))}`;
+																				arrayInfo.push({
+																								data: describe,
+																								priority: value.priority || 0
+																				});
+																}
+
+																arrayInfo.sort((a, b) => a.data - b.data); // sort by name
+																arrayInfo.sort((a, b) => a.priority > b.priority ? -1 : 1); // sort by priority
+																const { allPage, totalPage } = global.utils.splitPage(arrayInfo, numberOfOnePage);
+																if (page < 1 || page > totalPage)
+																				return message.reply(getLang("pageNotFound", page));
+
+																const returnArray = allPage[page - 1] || [];
+																const startNumber = (page - 1) * numberOfOnePage + 1;
+																msg += (returnArray || []).reduce((text, item, index) => text += `╭─❍\n➠ ${index + startNumber}${index + startNumber < 10 ? " " : ""}.${item.data}\n╰───────────⟡\n`, '').slice(0, -1);
+																await message.reply(getLang("help", msg, page, totalPage, commands.size, prefix, doNotDelete));
+												}
+												else if (sortHelp == "category") {
+																for (const [, value] of commands) {
+																				if (value.config.role > 1 && role < value.config.role)
+																								continue; // if role of command > role of user => skip
+																				const indexCategory = arrayInfo.findIndex(item => (item.category || "NO CATEGORY") == (value.config.category?.toLowerCase() || "NO CATEGORY"));
+
+																				if (indexCategory != -1)
+																								arrayInfo[indexCategory].names.push(value.config.name);
+																				else
+																								arrayInfo.push({
+																												category: value.config.category.toLowerCase(),
+																												names: [value.config.name]
+																								});
+																}
+																arrayInfo.sort((a, b) => (a.category < b.category ? -1 : 1));
+																arrayInfo.forEach((data, index) => {
+																				const categoryUpcase = `${index == 0 ? `╭` : `├`}─── ${data.category.toUpperCase()} ${index == 0 ? "⭓" : "⭔"}`;
+																				data.names = data.names.sort().map(item => item = `│ ${item}`);
+																				msg += `${categoryUpcase}\n${data.names.join("\n")}\n`;
+																});
+																message.reply(getLang("help2", msg, commands.size, prefix, doNotDelete));
+												}
+								}
+								// ———————————— COMMAND DOES NOT EXIST ———————————— //
+								else if (!command && args[0]) {
+												return message.reply(getLang("commandNotFound", args[0]));
+								}
+								// ————————————————— INFO COMMAND ————————————————— //
+								else {
+												const formSendMessage = {};
+												const configCommand = command.config;
+
+												let guide = configCommand.guide?.[langCode] || configCommand.guide?.["en"];
+												if (guide == undefined)
+																guide = customLang[configCommand.name]?.guide?.[langCode] || customLang[configCommand.name]?.guide?.["en"];
+
+												guide = guide || {
+																body: ""
+												};
+												if (typeof guide == "string")
+																guide = { body: guide };
+												const guideBody = guide.body
+																.replace(/\{prefix\}|\{p\}/g, prefix)
+																.replace(/\{name\}|\{n\}/g, configCommand.name)
+																.replace(/\{pn\}/g, prefix + configCommand.name);
+
+												const aliasesString = configCommand.aliases ? configCommand.aliases.join(", ") : getLang("doNotHave");
+												const aliasesThisGroup = threadData.data.aliases ? (threadData.data.aliases[configCommand.name] || []).join(", ") : getLang("doNotHave");
+
+												let roleOfCommand = configCommand.role;
+												let roleIsSet = false;
+												if (threadData.data.setRole?.[configCommand.name]) {
+																roleOfCommand = threadData.data.setRole[configCommand.name];
+																roleIsSet = true;
+												}
+
+												const roleText = roleOfCommand == 0 ?
+																(roleIsSet ? getLang("roleText0setRole") : getLang("roleText0")) :
+																roleOfCommand == 1 ?
+																				(roleIsSet ? getLang("roleText1setRole") : getLang("roleText1")) :
+																				getLang("roleText2");
+
+												const author = configCommand.author;
+												const descriptionCustomLang = customLang[configCommand.name]?.longDescription;
+												let description = checkLangObject(configCommand.longDescription, langCode);
+												if (description == undefined)
+																if (descriptionCustomLang != undefined)
+																				description = checkLangObject(descriptionCustomLang, langCode);
+																else
+																				description = getLang("doNotHave");
+
+												let sendWithAttachment = false; // check subcommand need send with attachment or not
+
+												if (args[1]?.match(/^-g|guide|-u|usage$/)) {
+																formSendMessage.body = getLang("onlyUsage", guideBody.split("\n").join("\n│"));
+																sendWithAttachment = true;
+												}
+												else if (args[1]?.match(/^-a|alias|aliase|aliases$/))
+																formSendMessage.body = getLang("onlyAlias", aliasesString, aliasesThisGroup);
+												else if (args[1]?.match(/^-r|role$/))
+																formSendMessage.body = getLang("onlyRole", roleText);
+												else if (args[1]?.match(/^-i|info$/))
+																formSendMessage.body = getLang("onlyInfo", configCommand.name, description, aliasesString, aliasesThisGroup, configCommand.version, roleText, configCommand.countDown || 1, author || "");
+												else {
+																formSendMessage.body = getLang("getInfoCommand", configCommand.name, description, aliasesString, aliasesThisGroup, configCommand.version, roleText, configCommand.countDown || 1, author || "", `${guideBody.split("\n").join("\n│")}`);
+																sendWithAttachment = true;
+												}
+
+												if (sendWithAttachment && guide.attachment) {
+																if (typeof guide.attachment == "object" && !Array.isArray(guide.attachment)) {
+																				const promises = [];
+																				formSendMessage.attachment = [];
+
+																				for (const keyPathFile in guide.attachment) {
+																								const pathFile = path.normalize(keyPathFile);
+
+																								if (!fs.existsSync(pathFile)) {
+																												const cutDirPath = path.dirname(pathFile).split(path.sep);
+																												for (let i = 0; i < cutDirPath.length; i++) {
+																																const pathCheck = `${cutDirPath.slice(0, i + 1).join(path.sep)}${path.sep}`; // create path
+																																if (!fs.existsSync(pathCheck))
+																																				fs.mkdirSync(pathCheck); // create folder
+																												}
+																												const getFilePromise = axios.get(guide.attachment[keyPathFile], { responseType: 'arraybuffer' })
+																																.then(response => {
+																																				fs.writeFileSync(pathFile, Buffer.from(response.data));
+																																});
+
+																												promises.push({
+																																pathFile,
+																																getFilePromise
+																												});
+																								}
+																								else {
+																												promises.push({
+																																pathFile,
+																																getFilePromise: Promise.resolve()
+																												});
+																								}
+																				}
+
+																				await Promise.all(promises.map(item => item.getFilePromise));
+																				for (const item of promises)
+																								formSendMessage.attachment.push(fs.createReadStream(item.pathFile));
+																}
+												}
+
+												return message.reply(formSendMessage);
+								}
+				}
 };
+
+function checkLangObject(data, langCode) {
+				if (typeof data == "string")
+								return data;
+				if (typeof data == "object" && !Array.isArray(data))
+								return data[langCode] || data.en || undefined;
+				return undefined;
+}
+
+function cropContent(content, max) {
+				if (content.length > max) {
+								content = content.slice(0, max - 3);
+								content = content + "...";
+				}
+				return content;
+																	}
