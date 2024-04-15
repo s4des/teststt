@@ -62,6 +62,8 @@ module.exports = {
     onStart: async ({ api, event, getLang, message }) => {
       const loadingMessage = getLang("loading");
         const loadingReply = await message.reply(loadingMessage);
+        
+
         const uptimeSeconds = Math.floor((Date.now() - startTime) / 1000);
         
 

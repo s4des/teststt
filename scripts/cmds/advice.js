@@ -26,8 +26,6 @@ module.exports = {
 
   onStart: async function ({ api, event, args, message, getLang }) {
     try {
-        const loadingMessage = getLang("loading");
-      const loadingReply = await message.reply(loadingMessage);
       const adviceResult = await srod.GetAdvice();
       const advice = adviceResult.embed.description;
 
@@ -44,6 +42,8 @@ module.exports = {
 
 async function translateAdvice(advice) {
   try {
+    const loadingMessage = getLang("loading");
+    const loadingReply = await message.reply(loadingMessage);
     const response = await axios.get(
       `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q=${encodeURIComponent(advice)}`
     );
