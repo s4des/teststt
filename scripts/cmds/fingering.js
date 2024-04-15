@@ -17,7 +17,7 @@ module.exports = {
 		const { existsSync, mkdirSync } = require("fs-extra");
 		const { downloadFile } = global.utils;
 		const dirMaterial = __dirname + `/cache/canvas/`;
-		const path = resolve(__dirname, 'cache/canvas', 'fingeringv2.png');
+		const path = resolve(__dirname, 'cache', 'canvas', 'fingeringv2.png');
 		if (!existsSync(dirMaterial + "canvas")) mkdirSync(dirMaterial, { recursive: true });
 		if (!existsSync(path)) await downloadFile("https://i.imgur.com/CQQZusa.jpeg", path);
 	},
@@ -40,9 +40,9 @@ module.exports = {
 		let getAvatarTwo = (await axios.get(`https://graph.facebook.com/${two}/picture?width=512&height=512&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`, { responseType: 'arraybuffer' })).data;
 		fs.writeFileSync(avatarTwo, Buffer.from(getAvatarTwo, 'utf-8'));
 
-		let circleOne = await jimp.read(await circle(avatarOne));
-		let circleTwo = await jimp.read(await circle(avatarTwo));
-		batgiam_img.composite(circleOne.resize(70, 70), 180, 110).composite(circleTwo.resize(70, 70), 120, 140);
+		let circleOne = await this.circle(avatarOne);
+		let circleTwo = await this.circle(avatarTwo);
+		batgiam_img.composite(await circleOne.resize(70, 70), 180, 110).composite(await circleTwo.resize(70, 70), 120, 140);
 
 		let raw = await batgiam_img.getBufferAsync("image/png");
 
