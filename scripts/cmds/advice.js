@@ -16,12 +16,13 @@ module.exports = {
     guide: {
       en: '{prefix} <>',
     },
+
     langs: {
       en: {
         final: "🤖 | TRANSLATING |",
         loading: "🤖 | TRANSLATING |\n━━━━━━━━━━━━━━━\n⏳ | 𝙋𝙡𝙚𝙖𝙨𝙚 𝙬𝙖𝙞𝙩......\n━━━━━━━━━━━━━━━\n",
       },
-    }
+    },
   },
 
   onStart: async function ({ api, event, args, message, getLang }) {
