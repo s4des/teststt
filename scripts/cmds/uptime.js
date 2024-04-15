@@ -60,7 +60,8 @@ module.exports = {
     },
 
     onStart: async ({ api, event, getLang, message }) => {
-      
+      const loadingMessage = getLang("loading");
+      const loadingReply = await message.reply(loadingMessage);
         const startTime = await module.exports.getStartTimestamp();
         const uptimeSeconds = Math.floor((Date.now() - startTime) / 1000);
 
@@ -72,8 +73,6 @@ module.exports = {
         };
 
         const timeStart = Date.now();
-        const loadingMessage = getLang("loading") || "Loading...";
-      const loadingReply = await message.reply(loadingMessage);
         const uptimeMessage = module.exports.getUptime(uptimeSeconds);
          const messageText = response.data.reply.trim(); // Adjust according to the response structure of the new API
       const userName = getLang("final");
