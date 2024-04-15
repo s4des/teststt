@@ -17,33 +17,34 @@ module.exports = {
       en: '{prefix} <>',
     },
     langs: {
-        en: {
-          final: "🤖 | TRANSLATING |",
-          loading: "🤖 | TRANSLATING |\n━━━━━━━━━━━━━━━\n⏳ | 𝙋𝙡𝙚𝙖𝙨𝙚 𝙬𝙖𝙞𝙩......\n━━━━━━━━━━━━━━━\n",
-        },
+      en: {
+        final: "🤖 | TRANSLATING |",
+        loading: "🤖 | TRANSLATING |\n━━━━━━━━━━━━━━━\n⏳ | 𝙋𝙡𝙚𝙖𝙨𝙚 𝙬𝙖𝙞𝙩......\n━━━━━━━━━━━━━━━\n",
+      },
     }
   },
 
   onStart: async function ({ api, event, args, message, getLang }) {
     try {
+      const loadingMessage = getLang("loading");
+      const loadingReply = await message.reply(loadingMessage);
+
       const adviceResult = await srod.GetAdvice();
       const advice = adviceResult.embed.description;
 
-      let translatedAdvice = await translateAdvice(advice);
+      const translatedAdvice = await translateAdvice(advice, message);
 
-      let finalMsg = `𝙎𝙤𝙥𝙝𝙞𝙖 𝘼𝙄:  ${translatedAdvice}`;
+      const finalMsg = `𝙎𝙤𝙥𝙝𝙞𝙖 𝘼𝙄:  ${translatedAdvice}`;
 
-      return api.editMessage(finalMsg, loadingReply.messageID);
+      await api.editMessage(finalMsg, loadingReply.messageID);
     } catch (error) {
       console.error(error);
     }
   },
 };
 
-async function translateAdvice(advice) {
+async function translateAdvice(advice, message) {
   try {
-    const loadingMessage = getLang("loading");
-    const loadingReply = await message.reply(loadingMessage);
     const response = await axios.get(
       `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q=${encodeURIComponent(advice)}`
     );
