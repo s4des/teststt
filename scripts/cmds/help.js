@@ -3,7 +3,7 @@ const axios = require("axios");
 const path = require("path");
 const { getPrefix } = global.utils;
 const { commands, aliases } = global.GoatBot;
-const doNotDelete = "⾕ |  ZACKI ";
+const doNotDelete = "━━━━━━༺༻━━━━━\n╭┈ ❒ 𝗨𝘀𝗲: -\n╰┈➤ this prefix to run this commands\n━━━━━━༺༻━━━━━━\n\n";
 /** 
 * @author NTKhang
 * @author: do not delete it
@@ -61,7 +61,7 @@ module.exports = {
 												pageNotFound: "Trang %1 không tồn tại"
 								},
 								en: {
-												help: "🔴🟡🟢\n\n╔⏤⏤⏤╝❀╚⏤⏤⏤╗\n      %6\n\n%1\n\nPage [ %2/%3 ]\nCurrently, The Bot has %4 Commands \n\n 📜 » Type %5help <page> \n 📃 » Type %5help <command> \n\n \n",
+												help: "𝐂𝐎𝐌𝐌𝐀𝐍𝐃𝐒 𝐋𝐈𝐒𝐓 𝐀𝐕𝐀𝐈𝐋𝐀𝐁𝐋𝐄\n\n    %6\n\n%1\n\n╭┈ ❒ 𝘗𝘢𝘨𝘦 [ %2/%3 ]\n╰┈➤ Currently, The Bot has %4 Commands \n╰┈➤ 𝘜𝘴𝘦 %5help <page> \n ╰┈➤ 𝘜𝘴𝘦 %5help <command> \n\n \n",
 												help2: "%1├───────⭔\n│ » Currently, the bot has %2 commands that can be used\n│ » Type %3help <command name> to view the details of how to use that command\n│ %4\n╰─────────────⭓",
 												commandNotFound: "My Lord, Command \"%1\" does not exist, My Apologies 😓",
 												getInfoCommand: "╭── NAME ────⭓\n│ %1\n├── INFO\n│ Description: %2\n│ Other names: %3\n│ Other names in your group: %4\n│ Version: %5\n│ Role: %6\n│ Time per command: %7s\n│ Author: %8\n├── Usage\n%9\n├── Notes\n│ The content inside <XXXXX> can be changed\n│ The content inside [a|b|c] is a or b or c\n╰──────⭔",
@@ -128,7 +128,7 @@ module.exports = {
 
 																const returnArray = allPage[page - 1] || [];
 																const startNumber = (page - 1) * numberOfOnePage + 1;
-																msg += (returnArray || []).reduce((text, item, index) => text += `╭─❍\n➠ ${index + startNumber}${index + startNumber < 10 ? " " : ""}.${item.data}\n╰───────────⟡\n`, '').slice(0, -1);
+																msg += (returnArray || []).reduce((text, item, index) => text += `━━━━━━━━━━━━\n╭┈ ❒ 「 ${index + startNumber}${index + startNumber < 10 ? " " : ""} 」➪ ${item.data} \n━━━━━━━━━━━━\n`, '').slice(0, -1);
 																await message.reply(getLang("help", msg, page, totalPage, commands.size, prefix, doNotDelete));
 												}
 												else if (sortHelp == "category") {
