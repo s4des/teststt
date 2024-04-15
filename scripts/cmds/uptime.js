@@ -72,7 +72,7 @@ module.exports = {
         };
 
         const timeStart = Date.now();
-        const loadingMessage = getLang("loading");
+        const loadingMessage = getLang("loading") || "Loading...";
       const loadingReply = await message.reply(loadingMessage);
         const uptimeMessage = module.exports.getUptime(uptimeSeconds);
         const returnResult = `BOT has been working for ${uptimeMessage}\n\n❖ Cpu usage: ${usage.cpu.toFixed(1)}%\n❖ RAM usage: ${module.exports.byte2mb(usage.memory)}\n❖ Cores: ${os.cpus().length}\n❖ Ping: ${Date.now() - timeStart}ms\n❖ Operating System Platform: ${osInfo.platform}\n❖ System CPU Architecture: ${osInfo.architecture}`;
