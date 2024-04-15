@@ -19,7 +19,6 @@ module.exports = {
 
     langs: {
       en: {
-        final: "🤖 | TRANSLATING |",
         loadings: "🤖 | TRANSLATING |\n━━━━━━━━━━━━━━━\n⏳ | 𝙋𝙡𝙚𝙖𝙨𝙚 𝙬𝙖𝙞𝙩......\n━━━━━━━━━━━━━━━\n"
       },
     },
