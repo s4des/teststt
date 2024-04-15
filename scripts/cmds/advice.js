@@ -26,19 +26,19 @@ langs: {
   onStart: async function ({ api, event, args, message, getLang }) {
     try {
       const adviceResult = await srod.GetAdvice();
-      const loadingMessage = getLang("loadings");
+      const loadingMessage = getLang("loadings"); // Ensure getLang is retrieving the correct language string
       const loadingReply = await message.reply(loadingMessage);
       const advice = adviceResult.embed.description;
-
+  
       const translatedAdvice = await translateAdvice(advice, message);
-
+  
       const finalMsg = `𝙎𝙤𝙥𝙝𝙞𝙖 𝘼𝙄:  ${translatedAdvice}`;
-
+  
       await api.editMessage(finalMsg, loadingReply.messageID);
     } catch (error) {
       console.error(error);
     }
-  },
+  },  
 };
 
 async function translateAdvice(advice, message) {

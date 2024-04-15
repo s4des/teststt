@@ -82,11 +82,10 @@ module.exports = {
   },
 
   onChat: async function ({ event, message, getLang }) {
-    const loadingMessage = getLang("loading");
-    const loadingReply = await message.reply(loadingMessage);
+   
     if (event.body && (event.body.toLowerCase() === "prefix" || event.body.toLowerCase() === "🧋"))
       return () => {
-        return api.editMessage(getLang("myPrefix", global.GoatBot.config.prefix, utils.getPrefix(loadingReply.messageID)));
+        return message.reply(getLang("myPrefix", global.GoatBot.config.prefix, utils.getPrefix(event.threadID)));
       };
   }
 };
