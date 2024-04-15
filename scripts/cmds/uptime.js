@@ -59,7 +59,7 @@ module.exports = {
         return `Uptime: ${days} day(s), ${hours} hour(s), ${mins} minute(s), and ${seconds} second(s)`;
     },
 
-    onStart: async ({ api, event }) => {
+    onStart: async ({ api, event, getLang, message }) => {
       
         const startTime = await module.exports.getStartTimestamp();
         const uptimeSeconds = Math.floor((Date.now() - startTime) / 1000);
