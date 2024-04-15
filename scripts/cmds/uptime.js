@@ -75,6 +75,8 @@ module.exports = {
         const loadingMessage = getLang("loading") || "Loading...";
       const loadingReply = await message.reply(loadingMessage);
         const uptimeMessage = module.exports.getUptime(uptimeSeconds);
+         const messageText = response.data.reply.trim(); // Adjust according to the response structure of the new API
+      const userName = getLang("final");
         const returnResult = `BOT has been working for ${uptimeMessage}\n\n❖ Cpu usage: ${usage.cpu.toFixed(1)}%\n❖ RAM usage: ${module.exports.byte2mb(usage.memory)}\n❖ Cores: ${os.cpus().length}\n❖ Ping: ${Date.now() - timeStart}ms\n❖ Operating System Platform: ${osInfo.platform}\n❖ System CPU Architecture: ${osInfo.architecture}`;
 
         await module.exports.saveStartTimestamp(startTime); // Save the start time again to ensure it's updated
