@@ -22,7 +22,7 @@ module.exports = {
       },
     },
   },
-
+    onStart: async function () {},
   onStart: async function ({ api, event, args, message, getLang }) {
     try {
       const adviceResult = await srod.GetAdvice();

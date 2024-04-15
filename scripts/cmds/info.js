@@ -15,12 +15,12 @@ module.exports = {
 		envConfig: {}
 	},
 	onStart: async function ({ message }) {
-		const botName = "sh4rl1e";
-		const botPrefix = "/";
-		const authorName = "Charlie";
+		const botName = "ChatBotV5";
+		const botPrefix = "-";
+		const authorName = "zach";
 		const ownAge = "17";
 		const teamName = "Neggas team";
-		const authorFB = "https://www.facebook.com/incognitotab.dev";
+		const authorFB = "https://www.facebook.com/zachary.pnaveax";
 		const urls = JSON.parse(fs.readFileSync('cliff.json'));
 		const link = urls[Math.floor(Math.random() * urls.length)];
 		const now = moment().tz('Asia/Jakarta');
