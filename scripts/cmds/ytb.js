@@ -77,7 +77,7 @@ module.exports = {
 			noAudio: "⭕ Sorry, no audio was found with a size less than 26MB",
 			info: "💠 Title: %1\n🏪 Channel: %2\n👨‍👩‍👧‍👦 Subscriber: %3\n⏱ Video duration: %4\n👀 View count: %5\n👍 Like count: %6\n🆙 Upload date: %7\n🔠 ID: %8\n🔗 Link: %9",
 			listChapter: "\n📖 List chapter: %1\n",
-			loading: "━━━━━━━━━━━━━━━\nChatBotV5 is searching on youtube that you request, please wait\n"
+			loading: "test"
 		}
 	},
 
@@ -101,11 +101,9 @@ module.exports = {
 			default:
 				return message.SyntaxError();
 		}
-		const { title, videoId } = infoVideo;
+
 		const checkurl = /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))((\w|-){11})(?:\S+)?$/;
 		const urlYtb = checkurl.test(args[1]);
-		const loadingMessage = getLang("loading");
-		const loadingReply = await message.reply(loadingMessage);
 
 		if (urlYtb) {
 			const infoVideo = await getVideoInfo(args[1]);
@@ -130,14 +128,16 @@ module.exports = {
 		let i = 1;
 		const thumbnails = [];
 		const arrayID = [];
+		const loadingMessage = getLang("loading");
 
+		const loadingReply = await message.reply(loadingMessage);
 		for (const info of result) {
 			thumbnails.push(getStreamFromURL(info.thumbnail));
 			msg += `${i++}. ${info.title}\nTime: ${info.time}\nChannel: ${info.channel.name}\n\n`;
 		}
 
 		api.editMessage({
-			body: getLang("choose", msg, loadingReply.messageID,),
+			body: getLang("choose", msg, loadingReply.messageID),
 			attachment: await Promise.all(thumbnails)
 		}, (err, info) => {
 			global.GoatBot.onReply.set(info.messageID, {
@@ -167,8 +167,9 @@ module.exports = {
 };
 
 async function handle({ type, infoVideo, message, getLang }) {
+	const { title, videoId } = infoVideo;
+
 	if (type == "video") {
-		
 		const MAX_SIZE = 83 * 1024 * 1024; // 83MB (max size of video that can be sent on fb)
 		const msgSend = message.reply(getLang("downloading", getLang("video"), title));
 		const { formats } = await ytdl.getInfo(videoId);
@@ -199,7 +200,7 @@ async function handle({ type, infoVideo, message, getLang }) {
 				const timeLeft = (contentLength / downloaded * (endTime - startTime)) / 1000;
 				const percent = downloaded / contentLength * 100;
 				if (timeLeft > 30) // if time left > 30s, send message
-				message.reply(getLang("downloading2", getLang("video"), title, Math.floor(speed / 1000) / 1000, Math.floor(downloaded / 1000) / 1000, Math.floor(contentLength / 1000) / 1000, Math.floor(percent), timeLeft.toFixed(2)));
+					message.reply(getLang("downloading2", getLang("video"), title, Math.floor(speed / 1000) / 1000, Math.floor(downloaded / 1000) / 1000, Math.floor(contentLength / 1000) / 1000, Math.floor(percent), timeLeft.toFixed(2)));
 			}
 		});
 		writeStrean.on("finish", () => {
