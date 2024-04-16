@@ -16,7 +16,7 @@ module.exports = {
     },
     lang: {
       en: {
-        loading: "⏳loading......."
+        loadings: "⏳loading......."
       }
     }
   },
@@ -41,9 +41,9 @@ module.exports = {
       systemUptime: formatUptime(os.uptime()),
       processMemory: prettyBytes(process.memoryUsage().rss)
     };
-    const loadingMessage = getLang("loading");
+    const loadingMessage = getLang("loadings");
 
-    const loadingReply = await message.reply(loadingMessage);
+    const loadingReply = message.reply(loadingMessage);
 
 
     const response = `𝐒𝐭𝐚𝐭𝐮𝐬\n`
