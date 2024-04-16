@@ -16,12 +16,24 @@ module.exports = {
     guide: {
       en: '{prefix} <>',
     },
+
+
+
+
+
+
     lang: {
-      en: {
+      en:  {
         loading: "⏳loading......."
-      },
-    },
+       }
+    }
+
+
+
+
   },
+
+
     onStart: async function () {},
   onStart: async function ({ api, event, args, message, getLang }) {
     
