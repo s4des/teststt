@@ -22,10 +22,7 @@ module.exports = {
   },
   onStart: async function ({ message, getLang, api }) {
 
-    const loadingMessage = this.lang.en.loading;
-
-      const loadingReply = await message.reply(loadingMessage);
-
+  
     const uptime = process.uptime();
     const formattedUptime = formatMilliseconds(uptime * 1000);
 
@@ -44,6 +41,10 @@ module.exports = {
       systemUptime: formatUptime(os.uptime()),
       processMemory: prettyBytes(process.memoryUsage().rss)
     };
+    const loadingMessage = getLang("loading");
+
+    const loadingReply = await message.reply(loadingMessage);
+
 
     const response = `𝐒𝐭𝐚𝐭𝐮𝐬\n`
       + '----------------------\n'
