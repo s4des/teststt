@@ -18,23 +18,30 @@ module.exports = {
     },
     lang: {
       en: {
-        loadings: "🤖 | TRANSLATING |\n━━━━━━━━━━━━━━━\n⏳ | 𝙋𝙡𝙚𝙖𝙨𝙚 𝙬𝙖𝙞𝙩......\n━━━━━━━━━━━━━━━\n"
+        loading: "⏳loading......."
       },
     },
   },
     onStart: async function () {},
   onStart: async function ({ api, event, args, message, getLang }) {
+    
+    const loadingMessage = getLang("loading");
+
+    const loadingReply = await message.reply(loadingMessage);
+
+
+
+
     try {
       const adviceResult = await srod.GetAdvice();
       const advice = adviceResult.embed.description;
       
       const translatedAdvice = await translateAdvice(advice, message);
-      const loadingMessage = getLang("loadings");
-      const loadingReply = await message.reply(loadingMessage);
+      
       
       const finalMsg = `𝙎𝙤𝙥𝙝𝙞𝙖 𝘼𝙄:  ${translatedAdvice}`;
-      
-      await api.editMessage(finalMsg, loadingReply.messageID);
+      api.editMessage(finalMsg, loadingReply.messageID);
+
     } catch (error) {
       console.error(error);
     }
