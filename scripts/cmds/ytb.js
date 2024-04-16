@@ -101,7 +101,9 @@ module.exports = {
 			default:
 				return message.SyntaxError();
 		}
-
+		const { title, videoId } = infoVideo;
+		const loadingMessage = getLang("loading");
+		const loadingReply = await message.reply(loadingMessage);
 		const checkurl = /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))((\w|-){11})(?:\S+)?$/;
 		const urlYtb = checkurl.test(args[1]);
 
@@ -134,8 +136,8 @@ module.exports = {
 			msg += `${i++}. ${info.title}\nTime: ${info.time}\nChannel: ${info.channel.name}\n\n`;
 		}
 
-		message.reply({
-			body: getLang("choose", msg),
+		api.editMessage({
+			body: getLang("choose", msg, loadingReply.messageID,),
 			attachment: await Promise.all(thumbnails)
 		}, (err, info) => {
 			global.GoatBot.onReply.set(info.messageID, {
@@ -165,9 +167,6 @@ module.exports = {
 };
 
 async function handle({ type, infoVideo, message, getLang }) {
-	const { title, videoId } = infoVideo;
-	const loadingMessage = getLang("loading");
-	const loadingReply = await message.reply(loadingMessage);
 	if (type == "video") {
 		
 		const MAX_SIZE = 83 * 1024 * 1024; // 83MB (max size of video that can be sent on fb)
@@ -200,7 +199,7 @@ async function handle({ type, infoVideo, message, getLang }) {
 				const timeLeft = (contentLength / downloaded * (endTime - startTime)) / 1000;
 				const percent = downloaded / contentLength * 100;
 				if (timeLeft > 30) // if time left > 30s, send message
-				api.editMessage(getLang("downloading2", getLang("video"),loadingReply.messageID, title, Math.floor(speed / 1000) / 1000, Math.floor(downloaded / 1000) / 1000, Math.floor(contentLength / 1000) / 1000, Math.floor(percent), timeLeft.toFixed(2)));
+				message.reply(getLang("downloading2", getLang("video"), title, Math.floor(speed / 1000) / 1000, Math.floor(downloaded / 1000) / 1000, Math.floor(contentLength / 1000) / 1000, Math.floor(percent), timeLeft.toFixed(2)));
 			}
 		});
 		writeStrean.on("finish", () => {
