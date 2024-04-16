@@ -1,6 +1,7 @@
 const os = require('os');
 const util = require('util');
-const exec = util.promisify(require('child_process').exec);
+const { exec } = require('child_process');
+const execAsync = util.promisify(exec);
 
 module.exports = {
   config: {
@@ -12,9 +13,18 @@ module.exports = {
     category: "members",
     guide: {
       en: "Use {p}info"
+    },
+    lang: {
+      en: {
+        loading: "⏳loading......."
+      }
     }
   },
-  onStart: async function ({ message }) {
+  onStart: async function ({ message, getLang, api }) {
+
+    const loadingMessage = getLang("loading");
+
+    const loadingReply = await message.reply(loadingMessage);
 
     const uptime = process.uptime();
     const formattedUptime = formatMilliseconds(uptime * 1000);
@@ -45,7 +55,7 @@ module.exports = {
       + '----------------------\n'
       + `💾 𝐌𝐞𝐦𝐨𝐫𝐲 𝐈𝐧𝐟𝐨𝐫𝐦𝐚𝐭𝐢𝐨𝐧:\n`
       + `  𝐌𝐞𝐦𝐨𝐫𝐲 𝐔𝐬𝐚𝐠𝐞: ${prettyBytes(usedMemory)} / Total ${prettyBytes(totalMemory)}\n`
-      + `  𝐑𝐀𝐌 𝐔𝐬𝐚𝐠𝐞: ${prettyBytes(os.totalmem() - os.freemem())} / Total ${prettyBytes(totalMemory)}\n`
+      + `  𝐑𝐀𝐌 𝐔𝐬𝐚𝐠𝐞: ${prettyBytes(totalMemory - freeMemory)} / Total ${prettyBytes(totalMemory)}\n`
       + '----------------------\n'
       + `📀 𝐃𝐢𝐬𝐤 𝐒𝐩𝐚𝐜𝐞 𝐈𝐧𝐟𝐨𝐫𝐦𝐚𝐭𝐢𝐨𝐧:\n`
       + `  𝐃𝐢𝐬𝐤 𝐒𝐩𝐚𝐜𝐞 𝐔𝐬𝐚𝐠𝐞: ${prettyBytes(diskUsage.used)} / Total ${prettyBytes(diskUsage.total)}\n`
@@ -55,12 +65,12 @@ module.exports = {
       + `📊 𝐏𝐫𝐨𝐜𝐞𝐬𝐬 𝐌𝐞𝐦𝐨𝐫𝐲 𝐔𝐬𝐚𝐠𝐞: ${systemInfo.processMemory}\n`
       + '----------------------';
 
-    message.reply(response);
+     api.editMessage(response, loadingReply.messageID);
   }
 };
 
 async function getDiskUsage() {
-  const { stdout } = await exec('df -k /');
+  const { stdout } = await execAsync('df -k /');
   const [_, total, used] = stdout.split('\n')[1].split(/\s+/).filter(Boolean);
   return { total: parseInt(total) * 1024, used: parseInt(used) * 1024 };
 }
