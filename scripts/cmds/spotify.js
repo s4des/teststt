@@ -21,7 +21,11 @@ module.exports = {
     category: "music",
     guide: "{pn} song title"
   },
-
+  lang: {
+    en:  {
+      loading: "⏳loading......."
+    }
+  },
   onStart: async function ({ api, event, args, message }) {
     const query = args.join(" ");
 
@@ -40,6 +44,9 @@ module.exports = {
       }
 
       const topTrack = tracks[0]; // Selecting the top track
+      const loadingMessage = this.lang.en.loading;
+
+      const loadingReply = await message.reply(loadingMessage);
 
       const SpdlApiUrl = 'https://for-devs.onrender.com/api/spotifydl?apikey=fuck&url=' + encodeURIComponent(topTrack.url);
 
@@ -55,7 +62,7 @@ module.exports = {
         } = apiResponse.data;
 
         const audioResponse = await axios.get(downloadUrl, { responseType: 'arraybuffer' });
-        
+
         const cacheDir = path.join(__dirname, 'cmds', 'cache');
         if (!fs.existsSync(cacheDir)) {
           fs.mkdirSync(cacheDir, { recursive: true });
@@ -74,7 +81,8 @@ module.exports = {
           attachment: attachment
         };
 
-        message.reply(form);
+        api.editMessage(form, loadingReply.messageID);
+
       } else {
         message.reply("Sorry, the Spotify content could not be downloaded.");
       }
