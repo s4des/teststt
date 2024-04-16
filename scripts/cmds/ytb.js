@@ -101,12 +101,11 @@ module.exports = {
 			default:
 				return message.SyntaxError();
 		}
-		const loadingMessage = getLang("loading");
-		const loadingReply = await message.reply(loadingMessage);
 		const { title, videoId } = infoVideo;
-		
 		const checkurl = /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))((\w|-){11})(?:\S+)?$/;
 		const urlYtb = checkurl.test(args[1]);
+		const loadingMessage = getLang("loading");
+		const loadingReply = await message.reply(loadingMessage);
 
 		if (urlYtb) {
 			const infoVideo = await getVideoInfo(args[1]);
