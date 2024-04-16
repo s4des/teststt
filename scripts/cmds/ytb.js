@@ -132,11 +132,8 @@ module.exports = {
 			thumbnails.push(getStreamFromURL(info.thumbnail));
 			msg += `${i++}. ${info.title}\nTime: ${info.time}\nChannel: ${info.channel.name}\n\n`;
 		}
-		const loadingMessage = getLang("loading");
-
-		const loadingReply = await message.reply(loadingMessage);
-
-		api.editMessage({
+		
+		return api.editMessage({
 			body: getLang("choose", msg, loadingReply.messageID),
 			attachment: await Promise.all(thumbnails)
 		}, (err, info) => {
