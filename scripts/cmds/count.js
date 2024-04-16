@@ -39,10 +39,11 @@ module.exports = {
 			endMessage: "Those who do not have a name in the list have not sent any messages.",
 			page: "Page [%1/%2]",
 			reply: "Reply to this message with the page number to view more",
-			result: "%1 rank %2 with %3 messages",
-			yourResult: "You are ranked %1 and have sent %2 messages in this group",
+			result: "━━━━━━━━━━━━━━━\n%1 rank %2 with %3 messages\n━━━━━━━━━━━━━━━",
+			yourResult: "━━━━━━━━━━━━━━━\nYou are ranked %1 and have sent %2 messages in this group\n━━━━━━━━━━━━━━━",
 			invalidPage: "Invalid page number",
-            loading: "Scanning please wait"
+            loading: "━━━━━━━━━━━━━━━\nScanning please wait\n━━━━━━━━━━━━━━━",
+            loading2: "━━━━━━━━━━━━━━━\nSccanning %1 please wait\n━━━━━━━━━━━━━━━"
 		}
 	},
 
@@ -103,8 +104,10 @@ module.exports = {
 				}
 				message.reply(msg);
 			}
-        
+
 			else if (event.mentions) {
+                const loadingMessage = getLang("loading2");
+                      const loadingReply = await message.reply(loadingMessage);
 				let msg = "";
 				for (const id in event.mentions) {
 					const findUser = arraySort.find(item => item.uid == id);
