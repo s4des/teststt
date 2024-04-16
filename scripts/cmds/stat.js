@@ -22,9 +22,9 @@ module.exports = {
   },
   onStart: async function ({ message, getLang, api }) {
 
-    const loadingMessage = getLang("loading");
+    const loadingMessage = this.lang.en.loading;
 
-    const loadingReply = await message.reply(loadingMessage);
+      const loadingReply = await message.reply(loadingMessage);
 
     const uptime = process.uptime();
     const formattedUptime = formatMilliseconds(uptime * 1000);
