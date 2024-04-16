@@ -103,20 +103,21 @@ module.exports = {
 				}
 				message.reply(msg);
 			}
+        
 			else if (event.mentions) {
 				let msg = "";
 				for (const id in event.mentions) {
 					const findUser = arraySort.find(item => item.uid == id);
 					msg += `\n${getLang("result", findUser.name, findUser.stt, findUser.count)}`;
 				}
-				message.reply(msg);
+				 api.editMessage(msg, loadingReply.messageID);
 			}
 		}
 		else {
             const loadingMessage = getLang("loading");
       const loadingReply = await message.reply(loadingMessage);
 			const findUser = arraySort.find(item => item.uid == senderID);
-			return api.editMessage(getLang("yourResult", findUser.stt, findUser.count, loadingReply.messageID));
+			return api.editMessage(getLang("yourResult", findUser.stt, findUser.count), loadingReply.messageID);
 		}
 	},
 
