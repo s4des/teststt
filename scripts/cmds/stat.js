@@ -16,14 +16,13 @@ module.exports = {
     },
     lang: {
       en: {
-        loadings: "⏳loading......."
+        loading: "⏳loading......."
       }
     }
   },
   onStart: async function ({ message, getLang, api }) {
-    const loadingMessage = getLang("loadings");
-
-    const loadingReply = message.reply(loadingMessage);
+   { const loadingMessage = getLang("loading");
+   const loadingReply = message.reply(loadingMessage); };
 
   
     const uptime = process.uptime();
