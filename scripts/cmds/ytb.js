@@ -81,7 +81,7 @@ module.exports = {
 		}
 	},
 
-	onStart: async function ({ args, message, event, commandName, getLang }) {
+	onStart: async function ({ args, message, event, commandName, getLang, api }) {
 		let type;
 		switch (args[0]) {
 			case "-v":
@@ -133,7 +133,7 @@ module.exports = {
 			msg += `${i++}. ${info.title}\nTime: ${info.time}\nChannel: ${info.channel.name}\n\n`;
 		}
 		
-		return api.editMessage({
+		api.editMessage({
 			body: getLang("choose", msg, loadingReply.messageID),
 			attachment: await Promise.all(thumbnails)
 		}, (err, info) => {
