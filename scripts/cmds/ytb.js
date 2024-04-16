@@ -128,13 +128,13 @@ module.exports = {
 		let i = 1;
 		const thumbnails = [];
 		const arrayID = [];
-		const loadingMessage = getLang("loading");
-
-		const loadingReply = await message.reply(loadingMessage);
 		for (const info of result) {
 			thumbnails.push(getStreamFromURL(info.thumbnail));
 			msg += `${i++}. ${info.title}\nTime: ${info.time}\nChannel: ${info.channel.name}\n\n`;
 		}
+		const loadingMessage = getLang("loading");
+
+		const loadingReply = await message.reply(loadingMessage);
 
 		api.editMessage({
 			body: getLang("choose", msg, loadingReply.messageID),
