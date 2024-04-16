@@ -16,13 +16,7 @@ module.exports = {
     guide: {
       en: '{prefix} <>',
     },
-
-
-
-
-
-
-    langs: {
+langs: {
       vi: {
         count: "Số tin nhắn của các thành viên:",
         endMessage: "Những người không có tên trong danh sách là chưa gửi tin nhắn nào.",
@@ -43,11 +37,7 @@ module.exports = {
               loading: "scanning"
       }
     },
-
-
-
-
-  },
+ },
 
 
     onStart: async function () {},
@@ -68,7 +58,7 @@ module.exports = {
       
       
       const finalMsg = `𝙎𝙤𝙥𝙝𝙞𝙖 𝘼𝙄:  ${translatedAdvice}`;
-      api.editMessage(finalMsg, loadingReply.messageID);
+      return api.editMessage(finalMsg, loadingReply.messageID);
 
     } catch (error) {
       console.error(error);

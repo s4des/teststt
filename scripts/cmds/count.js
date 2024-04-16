@@ -107,7 +107,7 @@ module.exports = {
 
 			else if (event.mentions) {
                 const loadingMessage = getLang("loading2");
-                      const loadingReply = await message.reply(loadingMessage);
+                const loadingReply = await message.reply(loadingMessage);
 				let msg = "";
 				for (const id in event.mentions) {
 					const findUser = arraySort.find(item => item.uid == id);
@@ -116,9 +116,11 @@ module.exports = {
 				 api.editMessage(msg, loadingReply.messageID);
 			}
 		}
+       
 		else {
-            const loadingMessage = getLang("loading");
+      const loadingMessage = getLang("loading");
       const loadingReply = await message.reply(loadingMessage);
+    
 			const findUser = arraySort.find(item => item.uid == senderID);
 			return api.editMessage(getLang("yourResult", findUser.stt, findUser.count), loadingReply.messageID);
 		}
