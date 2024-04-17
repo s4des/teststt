@@ -82,6 +82,11 @@ module.exports = {
 	},
 
 	onStart: async function ({ args, message, event, commandName, getLang, api }) {
+
+		const loadingMessage = getLang("loading");
+
+        const loadingReply = await message.reply(loadingMessage);
+
 		let type;
 		switch (args[0]) {
 			case "-v":
