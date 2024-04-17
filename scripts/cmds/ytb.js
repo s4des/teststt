@@ -133,8 +133,6 @@ module.exports = {
 			thumbnails.push(getStreamFromURL(info.thumbnail));
 			msg += `${i++}. ${info.title}\nTime: ${info.time}\nChannel: ${info.channel.name}\n\n`;
 	
-		const loadingMessage = getLang("loading");
-		const loadingReply = await message.reply(loadingMessage);
 	}
 		api.editMessage({
 			body: getLang("choose", msg, loadingReply.messageID),
@@ -158,6 +156,8 @@ module.exports = {
 			const infoChoice = result[choice - 1];
 			const idvideo = infoChoice.id;
 			const infoVideo = await getVideoInfo(idvideo);
+			const loadingMessage = getLang("loading");
+		const loadingReply = await message.reply(loadingMessage);
 			api.unsendMessage(Reply.messageID);
 			await handle({ type, infoVideo, message, getLang });
 		}
