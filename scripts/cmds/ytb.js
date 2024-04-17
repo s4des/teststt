@@ -134,8 +134,7 @@ module.exports = {
 			msg += `${i++}. ${info.title}\nTime: ${info.time}\nChannel: ${info.channel.name}\n\n`;
 	
 	}
-	const loadingReply = await message.reply(getLang("loading"));
-		api.editMessage({
+		message.reply({
 			body: getLang("choose", msg),
 			attachment: await Promise.all(thumbnails)
 		}, (err, info) => {
@@ -146,7 +145,7 @@ module.exports = {
 				arrayID,
 				result,
 				type,
-				loadingReply
+			
 			});
 		});
 	},
