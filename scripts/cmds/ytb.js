@@ -83,10 +83,6 @@ module.exports = {
 
 	onStart: async function ({ args, message, event, commandName, getLang, api }) {
 
-		const loadingMessage = getLang("loading");
-
-        const loadingReply = await message.reply(loadingMessage);
-
 		let type;
 		switch (args[0]) {
 			case "-v":
@@ -136,8 +132,10 @@ module.exports = {
 		for (const info of result) {
 			thumbnails.push(getStreamFromURL(info.thumbnail));
 			msg += `${i++}. ${info.title}\nTime: ${info.time}\nChannel: ${info.channel.name}\n\n`;
-		}
-		
+	
+		const loadingMessage = getLang("loading");
+		const loadingReply = await message.reply(loadingMessage);
+	}
 		api.editMessage({
 			body: getLang("choose", msg, loadingReply.messageID),
 			attachment: await Promise.all(thumbnails)
