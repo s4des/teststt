@@ -134,8 +134,9 @@ module.exports = {
 			msg += `${i++}. ${info.title}\nTime: ${info.time}\nChannel: ${info.channel.name}\n\n`;
 	
 	}
+	const loadingReply = await message.reply(getLang("loading"));
 		api.editMessage({
-			body: getLang("choose", msg, loadingReply.messageID),
+			body: getLang("choose", msg),
 			attachment: await Promise.all(thumbnails)
 		}, (err, info) => {
 			global.GoatBot.onReply.set(info.messageID, {
@@ -144,7 +145,8 @@ module.exports = {
 				author: event.senderID,
 				arrayID,
 				result,
-				type
+				type,
+				loadingReply
 			});
 		});
 	},
@@ -156,8 +158,6 @@ module.exports = {
 			const infoChoice = result[choice - 1];
 			const idvideo = infoChoice.id;
 			const infoVideo = await getVideoInfo(idvideo);
-			const loadingMessage = getLang("loading");
-		const loadingReply = await message.reply(loadingMessage);
 			api.unsendMessage(Reply.messageID);
 			await handle({ type, infoVideo, message, getLang });
 		}
