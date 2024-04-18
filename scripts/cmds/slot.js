@@ -50,7 +50,7 @@ module.exports = {
   
       const messageText = getSpinResultMessage(slot1, slot2, slot3, winnings, getLang);
   
-      return  api.editMessage(messageText, loadingReply.messageID);
+      return  reply.message(messageText, loadingReply.messageID);
     },
   };
   
