@@ -41,7 +41,7 @@ module.exports = {
   
       const winnings = calculateWinnings(slot1, slot2, slot3, amount);
       const loadingMessage = getLang("spin_message");
-       const loadingReply = await message.reply(loadingMessage);
+       
 
       await usersData.set(senderID, {
         money: userData.money + winnings,
