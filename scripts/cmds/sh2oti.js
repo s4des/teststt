@@ -19,7 +19,7 @@ module.exports = {
 },
   },
 
-  onStart: async function ({ api, event }) {
+  onStart: async function ({ api, event, getLang, message }) {
      const loadingMessage = getLang("loading");
      const loadingReply = await message.reply(loadingMessage);
     api.sendMessage("Fetching a short video from Shoti...", event.threadID);
