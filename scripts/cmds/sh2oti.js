@@ -4,7 +4,7 @@ const request = require("request");
 
 module.exports = {
   config: {
-    name: "shoti2",
+    name: "shoti",
     version: "1.0",
     author: "Ronald Allen Albania",
     countDown: 20,
@@ -56,7 +56,7 @@ module.exports = {
             event.threadID,
           );
           api.editMessage(
-            `Username: @${username}\nNickname: ${nickname}`, loadingReply.messageID,
+            `━━━━━━━━━━━━━━━\nUsername: @${username}\nNickname: ${nickname}\n━━━━━━━━━━━━━━━`, loadingReply.messageID,
             event.threadID,
           );
         });
