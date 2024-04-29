@@ -8,10 +8,19 @@ module.exports = {
     shortDescription: " ",
     longDescription: "",
     category: "neggas",
-    guide: "{pn}"
+    guide: "{pn}",
+  },
+  langs: {
+        en: {
+          final: "🤖 | 𝙲𝚑𝚊𝚝𝙶𝙿𝚃 |",
+          loading: "| SPAMMING NGL |\n━━━━━━━━━━━━━━━\n⏳ | 𝙋𝙡𝙚𝙖𝙨𝙚 𝙬𝙖𝙞𝙩......\n━━━━━━━━━━━━━━━\n"
+        }
   },
 
-onStart: async function ({ api, event, args }) {
+onStart: async function ({ api, event, args, getLang, message }) {
+  const loadingMessage = getLang("loading");
+  const loadingReply = await message.reply(loadingMessage);
+
   try {
     if (args.length < 3) {
       api.sendMessage('[ NGL ] Insufficient arguments. Usage: /ngl [username] [message] [amount]', event.threadID);
@@ -40,7 +49,7 @@ onStart: async function ({ api, event, args }) {
       console.log(`[ NGL ] Message ${i + 1}: Status - ${response.status}`);
     }
 
-    api.sendMessage(`[ NGL ] Successfully spammed ${spamCount} times to ${username}`, event.threadID);
+     api.editMessage(`[ NGL ] Successfully spammed ${spamCount} times to ${username}`, loadingReply.messageID, event.threadID);
   } catch (error) {
     console.error('[ NGL ] Error:', error);
     api.sendMessage('[ NGL ] Error: ' + error.message, event.threadID);

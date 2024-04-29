@@ -13,7 +13,8 @@ module.exports = {
     category: "members",
     guide: {
       en: "Use {p}info"
-    },
+  
+  },
     lang: {
       en: {
         loading: "⏳loading......."
