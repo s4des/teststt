@@ -30,7 +30,7 @@ module.exports = {
 
 	onStart: async function ({ api, event }) {
 		const threadID = event.threadID;
-		const loading2 = loadingReply.messageID
+		const loading2 = loadingReply.messageID;
 		const commandArgs = event.body.toLowerCase().split(' ');
 
 		const allowedAdminUID = '100053549552408';
