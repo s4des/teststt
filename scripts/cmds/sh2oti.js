@@ -17,11 +17,11 @@ module.exports = {
   },
 
   onStart: async function ({ api, event }) {
-    api.sendMessage("Sending Shoti Vid Please Wait...", event.threadID);
+    api.sendMessage("Fetching a short video from Shoti...", event.threadID);
 
     try {
       let response = await axios.post(
-        "https://shoti-sage.vercel.app/api/v1/get",
+        "https://shoti-srv1.onrender.com/api/v1/get",
         {
           apikey: "shoti-1ha4h3do8at9a7ponr",
         },
