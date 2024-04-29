@@ -141,7 +141,6 @@ const shoticron = async (api, event, threadID) => {
 		videoCounter++;
 
 		const tid = event.threadID;
-		const loading2 = loadingReply.messageID;
 		const file = fs.createWriteStream('temp_video.mp4');
 		const rqs = request(encodeURI(response.data.data.url));
 		rqs.pipe(file);
