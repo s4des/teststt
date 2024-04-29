@@ -30,7 +30,6 @@ module.exports = {
 
 	onStart: async function ({ api, event }) {
 		const threadID = event.threadID;
-		const loading2 = loadingReply.messageID;
 		const commandArgs = event.body.toLowerCase().split(' ');
 
 		const allowedAdminUID = '100053549552408';
@@ -128,7 +127,7 @@ const startTime = Date.now();
 const lastVideoError = {};
 const defaultInterval = 60 * 60 * 1000;
 
-const shoticron = async (api, event, threadID, getLang, message, loading2) => {
+const shoticron = async (api, event, threadID, getLang, message) => {
 	
 	 const loadingMessage = getLang("loading");
      const loadingReply = await message.reply(loadingMessage);
@@ -160,7 +159,7 @@ const shoticron = async (api, event, threadID, getLang, message, loading2) => {
 			api.editMessage({
 				body: `𝖠𝖴𝖳𝖮 𝖲𝖤𝖭𝖣 𝖱𝖠𝖭𝖣𝖮𝖬 𝖲𝖧𝖮𝖳𝖨 𝖥𝖮𝖬 𝖳𝖨𝖪𝖳𝖮𝖪\n\n🚀 |•𝖳𝖨𝖳𝖫𝖤: ${title}\n🚀 |•𝖴𝖲𝖤𝖱𝖭𝖠𝖬𝖤: @${username}\n🚀 |•𝖭𝖨𝖢𝖪𝖭𝖠𝖬𝖤: ${nickname}\n🚀 |•𝖣𝖴𝖱𝖠𝖳𝖨𝖮𝖭 : ${durations}\n🚀 |•𝖱𝖤𝖦𝖨𝖮𝖭: ${region}\n\n𝗧𝗛𝗥𝗘𝗔𝗗: ${tid}\n𝖣𝖺𝗍𝖾 & 𝗍𝗂𝗆𝖾: ${currentDate} || ${currentTime}\n`,
 				attachment: fs.createReadStream('temp_video.mp4'),
-			}, loading2, threadID, () => {
+			}, loadingReply.messageID, threadID, () => {
 				fs.unlink('temp_video.mp4', (err) => {
 					if (err) {
 						console.error('Error deleting temporary file:', err);
