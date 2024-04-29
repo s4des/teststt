@@ -13,10 +13,15 @@ module.exports = {
 
   langs: {
     vi: {},
-    en: {},
+    en: { 
+        final: "🤖 | 𝙲𝚑𝚊𝚝𝙶𝙿𝚃 |",
+        loading: "| SCANNING USERNAME |\n━━━━━━━━━━━━━━━\n⏳ | 𝙋𝙡𝙚𝙖𝙨𝙚 𝙬𝙖𝙞𝙩......\n━━━━━━━━━━━━━━━\n"
+},
   },
 
   onStart: async function ({ api, event }) {
+     const loadingMessage = getLang("loading");
+     const loadingReply = await message.reply(loadingMessage);
     api.sendMessage("Fetching a short video from Shoti...", event.threadID);
 
     try {
@@ -50,8 +55,8 @@ module.exports = {
             },
             event.threadID,
           );
-          api.sendMessage(
-            `Username: @${username}\nNickname: ${nickname}`,
+          api.editMessage(
+            `Username: @${username}\nNickname: ${nickname}`, loadingReply.messageID,
             event.threadID,
           );
         });
