@@ -1,69 +1,65 @@
-const axios = require("axios");
+const axios = require('axios');
+
 module.exports = {
 	config: {
-		name: 'sim',
-		version: '1.2',
-		author: 'KENLIEPLAYS',
-		countDown: 3,
+		name: 'simsimi',
+		aliases: ['sim'],
+		version: '1.0',
+		author: 'zach',
+		countDown: 5,
 		role: 0,
-		shortDescription: 'Simsimi ChatBot by Simsimi.fun',
-		longDescription: {
-			en: 'Chat with simsimi'
-		},
-		category: 'sim',
+		shortDescription: 'Simsimi',
+		longDescription: 'Chat with simsimi',
+		category: 'funny',
 		guide: {
-			en: '   {pn} <word>: chat with simsimi'
-				+ '\n   Example:{pn} hi'
+			body: '   {pn} {{[on | off]}}: bật/tắt simsimi'
+				+ '\n'
+				+ '\n   {pn} {{<word>}}: chat nhanh với simsimi'
+				+ '\n   Ví dụ: {pn} {{hi}}'
 		}
 	},
 
-	langs: {
-		en: {
-			chatting: 'Already Chatting with sim...',
-			error: 'Server Down Please Be Patient'
+	onStart: async function ({ args, threadsData, message, event }) {
+		if (args[0] == 'on' || args[0] == 'off') {
+			await threadsData.set(event.threadID, args[0] == "on", "settings.simsimi");
+			return message.reply(`Already ${args[0] == "on" ? "turn on" : "Turn off"} simsimi in your group`);
 		}
-	},
-
-	onStart: async function ({ args, message, event, getLang }) {
-		if (args[0]) {
+		else if (args[0]) {
 			const yourMessage = args.join(" ");
 			try {
 				const responseMessage = await getMessage(yourMessage);
-				return message.reply(`━━━━━━━━━━━━━━━\n${responseMessage}\n━━━━━━━━━━━━━━━`);
+				return message.reply(`${responseMessage}`);
 			}
 			catch (err) {
-				console.log(err)
-				return message.reply(getLang("error"));
+				return message.reply("Simsimi is busy, please try again later");
 			}
 		}
 	},
 
-	onChat: async ({ args, message, threadsData, event, isUserCallCommand, getLang }) => {
-		if (!isUserCallCommand) {
-			return;
-		}
-		if (args.length > 1) {
+	onChat: async ({ args, message, threadsData, event, isUserCallCommand }) => {
+		if (args.length > 1 && !isUserCallCommand && await threadsData.get(event.threadID, "settings.simsimi")) {
 			try {
-				const langCode = await threadsData.get(event.threadID, "settings.lang") || global.GoatBot.config.language;
-				const responseMessage = await getMessage(args.join(" "), langCode);
+				const responseMessage = await getMessage(args.join(" "));
 				return message.reply(`${responseMessage}`);
 			}
 			catch (err) {
-				return message.reply(getLang("error"));
+				return message.reply("Simsimi is busy, please try again later");
 			}
 		}
 	}
 };
 
-async function getMessage(yourMessage, langCode) {
-	try {
-		const res = await axios.get(`https://simsimi.fun/api/v2/?mode=talk&lang=ph&message=${yourMessage}&filter=false`);
-		if (!res.data.success) {
-			throw new Error('API returned a non-successful message');
+async function getMessage(yourMessage) {
+	const res = await axios.get(`https://api.simsimi.net/v2`, {
+		params: {
+			text: yourMessage,
+			lc: global.GoatBot.config.language == 'vi' ? 'vn' : 'en',
+			cf: false
 		}
-		return res.data.success;
-	} catch (err) {
-		console.error('Error while getting a message:', err);
-		throw err;
-	}
-      }
+	});
+
+	if (res.status > 200)
+		throw new Error(res.data.success);
+
+	return res.data.success;
+          }
