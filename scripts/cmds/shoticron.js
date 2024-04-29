@@ -122,7 +122,7 @@ const defaultInterval = 60 * 60 * 1000;
 
 const shoticron = async (api, event, threadID) => {
 	try {
-		let response = await axios.post('https://shoti-sage.vercel.app/api/v1/get', { apikey: '$shoti-1hsk9ni3tt6olm5tn0g' });
+		let response = await axios.post('shoti-sage.vercel.app/api/v1/get', { apikey: '$shoti-1hsk9ni3tt6olm5tn0g' });
 		console.log('API Response:', response.data);
 
 		if (response.data.error) {
