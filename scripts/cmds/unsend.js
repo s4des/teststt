@@ -28,7 +28,6 @@ module.exports = {
 			syntaxError: "Please reply the message you want to unsend"
 		}
 	},
-
 	onStart: async function ({ message, event, api, getLang }) {
 		if (!event.messageReply || event.messageReply.senderID != api.getCurrentUserID())
 			return message.reply(getLang("syntaxError"));
